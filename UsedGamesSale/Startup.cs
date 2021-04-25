@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UsedGamesSale.Services.UsedGamesAPI;
 
 namespace UsedGamesSale
 {
@@ -24,6 +25,13 @@ namespace UsedGamesSale
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            services.AddHttpClient("UsedGamesAPI", opt =>
+            {
+                opt.BaseAddress = new Uri(Configuration.GetValue<string>("UsedGamesAPI:URI"));
+            });
+
+            services.AddScoped<UsedGamesAPIClients>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
