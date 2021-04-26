@@ -1,21 +1,21 @@
 ﻿@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
 
 :root {
-  --primary-color: #3167eb;
-  --title-color: #343a40;
-  --text-color: #5e6267;
-  --grey-transparent: rgba(0, 0, 0, 0.2);
-  --green-light: #ccf0d1;
-  --green: #00b517;
-  --red: #fa3434;
+    --primary-color: #3167eb;
+    --title-color: #343a40;
+    --text-color: #5e6267;
+    --grey-transparent: rgba(0, 0, 0, 0.2);
+    --green-light: #ccf0d1;
+    --green: #00b517;
+    --red: #fa3434;
 }
 
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Roboto';
-  color: var(--text-color);
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto';
+    color: var(--text-color);
 }
 
 body {
@@ -45,48 +45,52 @@ button {
     top: 0px;
     background-color: white;
     border-bottom: 1px solid;
-    border: 1px  solid var(--grey-transparent);
+    border: 1px solid var(--grey-transparent);
 }
 
-.header .container {
-    grid-template-columns: 100px 600px 300px;
-    grid-gap: 0;
-}
+    .header .container {
+        grid-template-columns: 100px 600px 300px;
+        grid-gap: 0;
+    }
 
-.header .logo {
-    justify-self: start;
-}
+    .header .logo {
+        justify-self: start;
+    }
 
-.header .search-bar {
-    width: 100%;
-    margin-left: 50px;
-}
+    .header .search-bar {
+        width: 100%;
+        margin-left: 50px;
+    }
 
-.header .search-bar input {
-    width: 100%;
-    height: 40px;
-    border-radius: 4px 0 0 4px;
-    border: 1px  solid var(--grey-transparent);
-    padding-left: 10px;
-    outline: none;
-}
+        .header .search-bar input {
+            width: 100%;
+            height: 40px;
+            border-radius: 4px 0 0 4px;
+            border: 1px solid var(--grey-transparent);
+            padding-left: 10px;
+            outline: none;
+        }
 
-.header .search-bar button {
-    height: 40px;
-    border-radius: 0 4px 4px 0;
-}
+        .header .search-bar button {
+            height: 40px;
+            border-radius: 0 4px 4px 0;
+        }
 
-.header .account-space {
-    justify-self: end;
-}
+    .header .account-space {
+        justify-self: end;
+    }
 
-.header .account-space > * {
-    justify-self: start;
-    margin: 0 10px;
-}
+        .header .account-space > * {
+            justify-self: start;
+            margin: 0 10px;
+        }
 
-.header .account-space .circle {
-    background-color: white;
+        .header .account-space .circle {
+            background-color: white;
+        }
+
+main {
+    margin-top: 100px;
 }
 
 @media (max-width:1080px) {
@@ -106,6 +110,10 @@ button {
         grid-row: 2 / 3;
         grid-column: 1 / span 2;
         justify-self: center;
+    }
+
+    main {
+        margin-top: 175px;
     }
 }
 
@@ -131,9 +139,35 @@ button {
         margin: 0;
         grid-row: 3 / 4;
     }
+
+    main {
+        margin-top: 250px;
+    }
 }
 
-/*----- Main -----*/
-main {
-    margin-top: 100px;
+/*----- Login -----*/
+.login .card {
+    margin: 100px auto 0;
+}
+
+.login .form {
+    min-width: 400px;
+}
+
+@media (max-width: 510px) {
+    .login .card {
+        margin: 0 auto;
+    }
+
+    .login .form {
+        min-width: 100%;
+    }
+}
+
+/*----- Footer -----*/
+.footer {
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    border-top: 1px solid var(--grey-transparent);
 }

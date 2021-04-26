@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using UsedGamesSale.Models;
+using UsedGamesSale.Models.DTOs.User;
 using UsedGamesSale.Services.UsedGamesAPI;
 
 namespace UsedGamesSale.Controllers
@@ -18,9 +19,35 @@ namespace UsedGamesSale.Controllers
             _usedGamesAPIClients = usedGamesAPIClients;
         }
 
-        public async Task<IActionResult> Index()
+        [HttpGet]
+        public IActionResult Index()
         {
             return View();
+        }
+
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(UserLoginDTO userDTO)
+        {
+            if (!ModelState.IsValid) return View(userDTO);
+
+            UsedGamesAPIResponse response = await _usedGamesAPIClients.LoginAsync(userDTO);
+            if (!response.Success)
+            {
+                ViewData["MSG_E"] = response.Message;
+                return View(userDTO);
+            }
+
+            TempData.Remove("ClientToken");
+            TempData.Add("ClientToken", response.Token);
+            TempData.Remove("MSG_S");
+            TempData.Add("MSG_S", "Successfully logged");
+            return RedirectToAction(nameof(Index));
         }
     }
 }

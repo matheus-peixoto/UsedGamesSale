@@ -15,7 +15,7 @@
         <div class="container grid">
 
             <div class="logo flex">
-                <i class="fa fa-gamepad fa-2x txt-primary primary-color"></i>
+                <i class="fa fa-gamepad fa-3x txt-primary primary-color"></i>
                 <div>
                     <h4>Used</h4>
                     <h3>Games</h3>
@@ -25,34 +25,32 @@
             <div class="search-bar flex">
                 <input type="text" placeholder="Search">
                 <button class="btn btn-primary">
-                    <i class="fa fa-search fa-lg color-white"></i>
+                    <i class="fa fa-search fa-md color-white"></i>
                 </button>
             </div>
 
             <div class="account-space flex">
                 <a href="#" class="circle">
-                    <i class="fa fa-shopping-cart fa-lg"></i>
+                    <i class="fa fa-shopping-cart fa-md"></i>
                 </a>
                 <a href="#" class="circle">
-                    <i class="fa fa-user fa-lg"></i>
+                    <i class="fa fa-user fa-md"></i>
                 </a>
                 <div>
                     <h4>Welcome!</h4>
                     <div class="flex">
-                        <a href="#" class="mg-right-5px">Sign In </a> |
-                        <a href="#" class="mg-left-5px">Register</a>
+                        <a asp-action="Login" class="mg-right-5px">Sign In </a> |
+                        <a asp-action="Register" class="mg-left-5px">Register</a>
                     </div>
                 </div>
             </div>
         </div>
     </header>
-    <main role="main">
-        <div class="container">
+    <main>
             @RenderBody()
-        </div>
     </main>
 
-    <footer class="border-top footer text-muted">
+    <footer class="footer">
         <div class="container">
             &copy; 2021 - UsedGamesSale - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>

@@ -5,9 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\Front-End\index.html" />
-    <None Include="wwwroot\Front-End\site.css" />
-    <None Include="wwwroot\Front-End\utilities.css" />
+    <Compile Remove="wwwroot\Front-End\**" />
+    <Content Remove="wwwroot\Front-End\**" />
+    <EmbeddedResource Remove="wwwroot\Front-End\**" />
+    <None Remove="wwwroot\Front-End\**" />
   </ItemGroup>
 
   <ItemGroup>

@@ -3,3 +3,8 @@
 }
 
 @ViewData["Title"]
+
+@if (TempData.ContainsKey("MSG_S"))
+{
+    <div class="msg-success">@TempData["MSG_S"].ToString()</div>
+}

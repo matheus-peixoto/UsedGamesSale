@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using UsedGamesSale.Models;
+using UsedGamesSale.Models.DTOs.User;
 
 namespace UsedGamesSale.Services.UsedGamesAPI
 {
@@ -25,10 +26,14 @@ namespace UsedGamesSale.Services.UsedGamesAPI
             _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {value}");
         }
 
-        public async Task Login(User user)
+        public async Task<UsedGamesAPIResponse> LoginAsync(UserLoginDTO userDTO)
         {
-            string jsonUser = JsonConvert.SerializeObject(user);
-            HttpResponseMessage response = await _client.PostAsync(_client.BaseAddress + "login", new StringContent(jsonUser, Encoding.UTF8, "application/json"));
+            string jsonUser = JsonConvert.SerializeObject(userDTO);
+            HttpResponseMessage responseMsg = await _client.PostAsync(_client.BaseAddress + "login", new StringContent(jsonUser, Encoding.UTF8, "application/json"));
+            string responseStr = await responseMsg.Content.ReadAsStringAsync();
+            UsedGamesAPIResponse response = JsonConvert.DeserializeObject<UsedGamesAPIResponse>(responseStr);
+            response.Success = responseMsg.IsSuccessStatusCode;
+            return response;
         }
     }
 }
