@@ -14,5 +14,10 @@
     </aside>
 </section>
 <section class="container main-panel">
+    @if (TempData.ContainsKey("MSG_S"))
+    {
+        <div class="msg-success">@TempData["MSG_S"].ToString()</div>
+    }
+
     @ViewData["Title"].ToString()
 </section>
