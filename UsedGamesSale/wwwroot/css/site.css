@@ -1,71 +1,139 @@
-﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-for details on configuring this project to bundle and minify static web assets. */
+﻿@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
 
-a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
-}
-
-/* Provide sufficient contrast against white background */
-a {
-  color: #0366d6;
+:root {
+  --primary-color: #3167eb;
+  --title-color: #343a40;
+  --text-color: #5e6267;
+  --grey-transparent: rgba(0, 0, 0, 0.2);
+  --green-light: #ccf0d1;
+  --green: #00b517;
+  --red: #fa3434;
 }
 
-.btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
-}
-
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
-}
-
-/* Sticky footer styles
--------------------------------------------------- */
-html {
-  font-size: 14px;
-}
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.border-top {
-  border-top: 1px solid #e5e5e5;
-}
-.border-bottom {
-  border-bottom: 1px solid #e5e5e5;
-}
-
-.box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
-}
-
-button.accept-policy {
-  font-size: 1rem;
-  line-height: inherit;
-}
-
-/* Sticky footer styles
--------------------------------------------------- */
-html {
-  position: relative;
-  min-height: 100%;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Roboto';
+  color: var(--text-color);
 }
 
 body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
+    width: 100%;
+    height: 100%;
+    min-height: 100vh;
+    display: table;
+    position: relative;
 }
-.footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px; /* Vertically center the text there */
+
+ul {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+button {
+    border: none;
+}
+
+/*----- Header -----*/
+.header {
+    width: 100%;
+    position: fixed;
+    top: 0px;
+    background-color: white;
+    border-bottom: 1px solid;
+    border: 1px  solid var(--grey-transparent);
+}
+
+.header .container {
+    grid-template-columns: 100px 600px 300px;
+    grid-gap: 0;
+}
+
+.header .logo {
+    justify-self: start;
+}
+
+.header .search-bar {
+    width: 100%;
+    margin-left: 50px;
+}
+
+.header .search-bar input {
+    width: 100%;
+    height: 40px;
+    border-radius: 4px 0 0 4px;
+    border: 1px  solid var(--grey-transparent);
+    padding-left: 10px;
+    outline: none;
+}
+
+.header .search-bar button {
+    height: 40px;
+    border-radius: 0 4px 4px 0;
+}
+
+.header .account-space {
+    justify-self: end;
+}
+
+.header .account-space > * {
+    justify-self: start;
+    margin: 0 10px;
+}
+
+.header .account-space .circle {
+    background-color: white;
+}
+
+@media (max-width:1080px) {
+
+    .header .container {
+        grid-template-columns: 1fr 1fr;
+        grid-row-gap: 20px;
+    }
+
+    .header .account-space {
+        grid-column: 2 / span 3;
+        grid-row: 1 / 2;
+    }
+
+    .header .search-bar {
+        margin: 0;
+        grid-row: 2 / 3;
+        grid-column: 1 / span 2;
+        justify-self: center;
+    }
+}
+
+@media (max-width: 460px) {
+    .header .container {
+        grid-template-columns: 1fr;
+    }
+
+    .header .logo {
+        justify-self: center;
+        grid-column: 1 / 2;
+        grid-row: 1 / 2;
+    }
+
+    .header .account-space {
+        justify-self: center;
+        grid-column: 1 / 2;
+        grid-row: 2 / 3;
+    }
+
+    .header .search-bar {
+        justify-self: center;
+        margin: 0;
+        grid-row: 3 / 4;
+    }
+}
+
+/*----- Main -----*/
+main {
+    margin-top: 100px;
 }

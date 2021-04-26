@@ -21,6 +21,7 @@ namespace UsedGamesSale.Services.UsedGamesAPI
 
         public void ConfigureToken(string value)
         {
+            _client.DefaultRequestHeaders.Clear();
             _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {value}");
         }
 
