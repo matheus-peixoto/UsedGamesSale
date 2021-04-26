@@ -6,8 +6,9 @@
     --text-color: #5e6267;
     --grey-transparent: rgba(0, 0, 0, 0.2);
     --green-light: #ccf0d1;
-    --green: #00b517;
-    --red: #fa3434;
+    --green: #55ca7c;
+    --red: #f55a5a;
+    ;
 }
 
 * {
@@ -41,6 +42,7 @@ button {
 /*----- Header -----*/
 .header {
     width: 100%;
+    padding: 0px 0 10px;
     position: fixed;
     top: 0px;
     background-color: white;
@@ -80,6 +82,10 @@ button {
         justify-self: end;
     }
 
+        .header .account-space .user {
+            position: relative;
+        }
+
         .header .account-space > * {
             justify-self: start;
             margin: 0 10px;
@@ -90,7 +96,7 @@ button {
         }
 
 main {
-    margin-top: 100px;
+    margin-top: 105px;
 }
 
 @media (max-width:1080px) {
@@ -113,7 +119,7 @@ main {
     }
 
     main {
-        margin-top: 175px;
+        margin-top: 165px;
     }
 }
 
@@ -143,6 +149,30 @@ main {
     main {
         margin-top: 250px;
     }
+}
+
+
+/*----- Main -----*/
+main .container {
+    padding: 0 20px 0 0;
+    align-content: start;
+}
+
+
+/*----- Categories -----*/
+.categories {
+    width: 100%;
+    padding: 10px;
+    border-bottom: 1px solid var(--grey-transparent);
+    text-align: center;
+}
+
+.categories .flex {
+    justify-content: space-around;
+}
+
+.main-panel {
+    width: 100%;
 }
 
 /*----- Login -----*/

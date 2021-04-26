@@ -1,0 +1,62 @@
+﻿@{
+    SellerLoginManager sellerLoginManager = (SellerLoginManager)Context.RequestServices.GetService(typeof(SellerLoginManager));
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - UsedGamesSale</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+          integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+          crossorigin="anonymous" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/utilities.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container grid">
+
+            <div class="logo flex">
+                <i class="fa fa-gamepad fa-3x txt-primary primary-color"></i>
+                <div>
+                    <h4>Used</h4>
+                    <h3>Games</h3>
+                </div>
+            </div>
+
+            <div class="search-bar flex">
+                <input type="text" placeholder="Search">
+                <button class="btn btn-primary">
+                    <i class="fa fa-search fa-md color-white"></i>
+                </button>
+            </div>
+
+            <div class="account-space flex">
+                <a href="#" class="circle">
+                    <i class="fa fa-user fa-md"></i>
+                </a>
+                <div>
+                    <h4>Welcome!</h4>
+                    <div class="flex">
+                        @if (sellerLoginManager.IsLogged())
+                        {
+                            <span>@sellerLoginManager.GetUser().Name</span>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main>
+        @RenderBody()
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            &copy; 2021 - UsedGamesSale - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+</body>
+</html>
