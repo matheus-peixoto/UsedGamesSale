@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@{
+    ClientLoginManager clientLoginManager = (ClientLoginManager)Context.RequestServices.GetService(typeof(ClientLoginManager));
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -39,15 +43,23 @@
                 <div>
                     <h4>Welcome!</h4>
                     <div class="flex">
-                        <a asp-action="Login" class="mg-right-5px">Sign In </a> |
-                        <a asp-action="Register" class="mg-left-5px">Register</a>
+                        @if (!clientLoginManager.IsLogged())
+                        {
+                            <a asp-action="Login" class="mg-right-5px">Sign In </a>
+                            <span>|</span>
+                            <a asp-action="Register" class="mg-left-5px">Register</a>
+                        }
+                        else
+                        {
+                            <span>@clientLoginManager.GetUser().Name</span>
+                        }
                     </div>
                 </div>
             </div>
         </div>
     </header>
     <main>
-            @RenderBody()
+        @RenderBody()
     </main>
 
     <footer class="footer">

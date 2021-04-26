@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -8,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UsedGamesSale.Services.Login;
 using UsedGamesSale.Services.UsedGamesAPI;
 
 namespace UsedGamesSale
@@ -24,14 +26,17 @@ namespace UsedGamesSale
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            services.Configure<CookieTempDataProviderOptions>(options => options.Cookie.IsEssential = true);
 
+            services.AddControllersWithViews();
+            services.AddSession(options => options.Cookie.IsEssential = true);
+            services.AddHttpContextAccessor();
             services.AddHttpClient("UsedGamesAPI", opt =>
             {
                 opt.BaseAddress = new Uri(Configuration.GetValue<string>("UsedGamesAPI:URI"));
             });
-
             services.AddScoped<UsedGamesAPIClients>();
+            services.AddScoped<ClientLoginManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,6 +58,8 @@ namespace UsedGamesSale
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {

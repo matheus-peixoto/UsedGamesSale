@@ -4,29 +4,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using UsedGamesSale.Models;
 using UsedGamesSale.Models.DTOs.User;
+using UsedGamesSale.Services.Login;
 using UsedGamesSale.Services.UsedGamesAPI;
 
 namespace UsedGamesSale.Controllers
 {
     public class HomeController : Controller
     {
-        private UsedGamesAPIClients _usedGamesAPIClients;
+        private readonly UsedGamesAPIClients _usedGamesAPIClients;
+        private readonly ClientLoginManager _clientLoginManager;
 
-        public HomeController(UsedGamesAPIClients usedGamesAPIClients)
+        public HomeController(UsedGamesAPIClients usedGamesAPIClients, ClientLoginManager clientLoginManager)
         {
             _usedGamesAPIClients = usedGamesAPIClients;
+            _clientLoginManager = clientLoginManager;
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             return View();
         }
 
         [HttpGet]
-        public IActionResult Login()
+        public  IActionResult Login()
         {
             return View();
         }
@@ -43,8 +45,8 @@ namespace UsedGamesSale.Controllers
                 return View(userDTO);
             }
 
-            TempData.Remove("ClientToken");
-            TempData.Add("ClientToken", response.Token);
+            _clientLoginManager.Login(response.User, response.Token);
+
             TempData.Remove("MSG_S");
             TempData.Add("MSG_S", "Successfully logged");
             return RedirectToAction(nameof(Index));

@@ -2,9 +2,11 @@
     ViewData["Title"] = "Home Page";
 }
 
-@ViewData["Title"]
+<div class="container">
+    @if (TempData.ContainsKey("MSG_S"))
+    {
+        <div class="msg-success">@TempData["MSG_S"].ToString()</div>
+    }
 
-@if (TempData.ContainsKey("MSG_S"))
-{
-    <div class="msg-success">@TempData["MSG_S"].ToString()</div>
-}
+    @ViewData["Title"]
+</div>

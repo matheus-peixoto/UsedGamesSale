@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,6 +31,7 @@ namespace UsedGamesSale.Services.UsedGamesAPI
         {
             string jsonUser = JsonConvert.SerializeObject(userDTO);
             HttpResponseMessage responseMsg = await _client.PostAsync(_client.BaseAddress + "login", new StringContent(jsonUser, Encoding.UTF8, "application/json"));
+            if (responseMsg.StatusCode == HttpStatusCode.Unauthorized) { }
             string responseStr = await responseMsg.Content.ReadAsStringAsync();
             UsedGamesAPIResponse response = JsonConvert.DeserializeObject<UsedGamesAPIResponse>(responseStr);
             response.Success = responseMsg.IsSuccessStatusCode;
