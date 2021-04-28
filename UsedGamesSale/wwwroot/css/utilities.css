@@ -25,6 +25,98 @@
     color: var(--primary-color);
 }
 
+.table-container {
+    width: 100%;
+    margin: 0 auto;
+    padding: 15px 15px 5px;
+    border: 3px solid var(--grey-transparent-light);
+    border-radius: 3px;
+}
+
+.table {
+    width: 100%;
+    padding: 15px;
+    border-radius: 3px;
+}
+
+    .table thead {
+        background-color: var(--primary-color);
+        font-weight: bold;
+        color: white;
+    }
+
+    .table tr {
+        width: 100%;
+        display: table-row;
+        border: 1px solid #ccc;
+        border-radius: 1px;
+    }
+
+        .table tr:hover {
+            background-color: var(--grey-transparent-ultra-light);
+        }
+
+    .table td::before {
+        display: none;
+    }
+
+    .table td, .table th {
+        display: table-cell;
+        padding: 10px;
+        text-align: left;
+    }
+
+@media (max-width: 767px) {
+    .table .table-container {
+        border: 3px solid var(--grey-transparent-light);
+    }
+
+    .table {
+        width: 100%;
+    }
+
+        .table tr {
+            border: 0px solid transparent;
+        }
+
+            .table tr:hover {
+                background-color: inherit;
+            }
+
+        .table th {
+            display: none;
+        }
+
+        .table td, .table th {
+            text-align: center;
+        }
+
+        .table td {
+            display: block;
+            border: 2px solid var(--primary-color);
+            border-radius: 2px;
+            margin: 3px 0;
+        }
+
+            .table td:hover {
+                background-color: var(--grey-transparent-ultra-light);
+            }
+
+            .table td:first-child {
+                margin-top: 15px;
+            }
+
+            .table td:last-child {
+                margin-bottom: 15px;
+            }
+
+            .table td::before {
+                content: attr(data-th);
+                font-weight: bold;
+                display: inline-block;
+            }
+}
+
 .card {
     padding: 20px;
     border: 1px solid var(--grey-transparent);
@@ -55,10 +147,20 @@
         outline: none;
     }
 
+        .form-control input[type=radio] {
+            width: auto;
+        }
+
 .circle {
     padding: 10px;
     border-radius: 50%;
     border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.circle-sm {
+    width: 10px;
+    height: 10px;
+    padding: 4px;
 }
 
 .msg-error {
@@ -115,4 +217,16 @@
 
 .mg-left-5px {
     margin-left: 5px;
+}
+
+.mg-top-5px {
+    margin-top: 5px;
+}
+
+.mg-top-25px {
+    margin-top: 25px;
+}
+
+.mg-bottom-5px {
+    margin-bottom: 5px;
 }

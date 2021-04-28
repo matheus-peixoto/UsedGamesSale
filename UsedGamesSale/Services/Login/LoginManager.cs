@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
+using UsedGamesSale.Models;
 using UsedGamesSale.Services.Login.Interfaces;
 
 namespace UsedGamesSale.Services.Login
 {
-    public abstract class LoginManager<T> : ILoginManager<T>
-        where T : class
+    public abstract class LoginManager : ILoginManager
     {
         protected readonly IHttpContextAccessor _httpContext;
         protected readonly string _key;
@@ -18,20 +18,26 @@ namespace UsedGamesSale.Services.Login
             _tokenKey = key + ".Token";
         }
 
-        public T GetUser()
+        public User GetUser()
         {
             string jsonModel = _httpContext.HttpContext.Session.GetString(_key);
             if (string.IsNullOrEmpty(jsonModel))
                 return null;
 
-            return JsonConvert.DeserializeObject<T>(jsonModel);
+            return JsonConvert.DeserializeObject<User>(jsonModel);
+        }
+
+        public int GetUserId()
+        {
+            string jsonModel = _httpContext.HttpContext.Session.GetString(_key);
+            return JsonConvert.DeserializeObject<User>(jsonModel).Id;
         }
 
         public string GetUserToken() => _httpContext.HttpContext.Session.GetString(_tokenKey);
 
-        public void Login(T model, string token)
+        public void Login(User user, string token)
         {
-            string jsonModel = JsonConvert.SerializeObject(model);
+            string jsonModel = JsonConvert.SerializeObject(user);
             _httpContext.HttpContext.Session.SetString(_key, jsonModel);
             _httpContext.HttpContext.Session.SetString(_tokenKey, token);
         }

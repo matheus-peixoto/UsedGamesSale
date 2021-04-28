@@ -9,7 +9,6 @@ namespace UsedGamesSale.Services.Filters
     {
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            var a = context;
             SellerLoginManager loginManager = context.HttpContext.RequestServices.GetService(typeof(SellerLoginManager)) as SellerLoginManager;
             if (!loginManager.IsLogged())
                 context.Result = new RedirectToActionResult("Login", "Home", new {});

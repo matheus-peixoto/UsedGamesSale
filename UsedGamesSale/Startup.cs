@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -56,7 +57,7 @@ namespace UsedGamesSale
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            //app.UseCookiePolicy();
             app.UseRouting();
 
             app.UseAuthorization();
@@ -66,11 +67,11 @@ namespace UsedGamesSale
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
+                    name: "Seller",
+                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
-                endpoints.MapControllerRoute(
-                    name: "Seller", 
-                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

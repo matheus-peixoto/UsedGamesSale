@@ -8,7 +8,7 @@ using UsedGamesSale.Models;
 
 namespace UsedGamesSale.Services.Login
 {
-    public class ClientLoginManager : LoginManager<User>
+    public class ClientLoginManager : LoginManager
     {
         public ClientLoginManager(IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor, "Login.Client")  { }
     }

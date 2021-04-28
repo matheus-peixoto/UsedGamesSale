@@ -4,11 +4,12 @@
     --primary-color: #3167eb;
     --title-color: #343a40;
     --text-color: #5e6267;
-    --grey-transparent: rgba(0, 0, 0, 0.2);
+    --grey-transparent: rgba(0, 0, 0, 0.15);
+    --grey-transparent-light: rgba(0, 0, 0, 0.07);
+    --grey-transparent-ultra-light: rgba(0, 0, 0, 0.035);
     --green-light: #ccf0d1;
     --green: #55ca7c;
     --red: #f55a5a;
-    ;
 }
 
 * {
@@ -147,27 +148,29 @@ main {
     }
 
     main {
-        margin-top: 250px;
+        margin-top: 225px;
     }
 }
 
 
-/*----- Main -----*/
-main .container {
-    padding: 0 20px 0 0;
-    align-content: start;
+/*----- Main Panel -----*/
+.main-panel {
+}
+
+.main-panel .table thead th {
+    color: white;
 }
 
 
 /*----- Categories -----*/
 .categories {
     width: 100%;
-    padding: 10px;
     border-bottom: 1px solid var(--grey-transparent);
     text-align: center;
 }
 
 .categories .flex {
+    padding: 10px;
     justify-content: space-around;
 }
 
@@ -177,7 +180,7 @@ main .container {
 
 /*----- Login -----*/
 .login .card {
-    margin: 100px auto 0;
+    margin: 50px auto 0;
 }
 
 .login .form {
@@ -185,9 +188,7 @@ main .container {
 }
 
 @media (max-width: 510px) {
-    .login .card {
-        margin: 0 auto;
-    }
+    
 
     .login .form {
         min-width: 100%;

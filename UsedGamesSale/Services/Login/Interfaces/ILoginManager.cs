@@ -1,10 +1,13 @@
-﻿namespace UsedGamesSale.Services.Login.Interfaces
+﻿using UsedGamesSale.Models;
+
+namespace UsedGamesSale.Services.Login.Interfaces
 {
-    public interface ILoginManager<T> where T : class
+    public interface ILoginManager
     {
-        T GetUser();
+        User GetUser();
+        int GetUserId();
         string GetUserToken();
-        void Login(T model, string token);
+        void Login(User user, string token);
         void Logout();
         bool IsLogged();
     }

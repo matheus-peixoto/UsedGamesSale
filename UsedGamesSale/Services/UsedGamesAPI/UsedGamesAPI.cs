@@ -12,18 +12,12 @@ namespace UsedGamesSale.Services.UsedGamesAPI
 {
     public abstract class UsedGamesAPI : IUsedGamesAPI
     {
-        private readonly HttpClient _client;
+        protected readonly HttpClient _client;
 
         public UsedGamesAPI(IHttpClientFactory clientFactory, string endpoint)
         {
             _client = clientFactory.CreateClient("UsedGamesAPI");
             _client.BaseAddress = new Uri(_client.BaseAddress.AbsoluteUri + endpoint);
-        }
-
-        public void ConfigureToken(string value)
-        {
-            _client.DefaultRequestHeaders.Clear();
-            _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {value}");
         }
 
         public async Task<UsedGamesAPIResponse> LoginAsync(UserLoginDTO userDTO)
@@ -34,6 +28,12 @@ namespace UsedGamesSale.Services.UsedGamesAPI
             UsedGamesAPIResponse response = JsonConvert.DeserializeObject<UsedGamesAPIResponse>(responseStr);
             response.Success = responseMsg.IsSuccessStatusCode;
             return response;
+        }
+
+        protected void ConfigureToken(string value)
+        {
+            _client.DefaultRequestHeaders.Clear();
+            _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {value}");
         }
     }
 }

@@ -8,8 +8,6 @@ namespace UsedGamesSale.Services.UsedGamesAPI.Interfaces
 {
     public interface IUsedGamesAPI
     {
-        public void ConfigureToken(string value);
-
         public Task<UsedGamesAPIResponse> LoginAsync(UserLoginDTO userDTO);
     }
 }

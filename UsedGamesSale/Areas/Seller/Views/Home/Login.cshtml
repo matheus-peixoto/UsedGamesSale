@@ -23,13 +23,13 @@
                 <div class="msg-error-sm"><span asp-validation-for="Email"></span></div>
             </div>
             <div class="form-control">
-                <input asp-for="Password" type="password" placeholder="Password" maxlength="20" min="8">
+                <input id="password" asp-for="Password" type="password" placeholder="Password" maxlength="20" min="8">
                 <div class="msg-error-sm"><span asp-validation-for="Password"></span></div>
             </div>
             <div class="form-control flex">
                 <div class="flex">
-                    <button class="circle"></button>
-                    <label>Show password</label>
+                    <input id="showpasswordBtn" type="radio">
+                    <label for="showpasswordBtn"> Show password</label>
                 </div>
                 <a href="">Forgot password?</a>
             </div>
@@ -37,3 +37,5 @@
         </form>
     </div>
 </div>
+
+<script src="~/js/login.js"></script>

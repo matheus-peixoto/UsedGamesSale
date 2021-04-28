@@ -1,5 +1,8 @@
-﻿@{ 
+﻿@model List<Game>
+
+@{
     ViewData["Title"] = "Home";
+    Game gm = new Game();
 }
 
 <section class="categories">
@@ -19,5 +22,43 @@
         <div class="msg-success">@TempData["MSG_S"].ToString()</div>
     }
 
-    @ViewData["Title"].ToString()
+    <h2 class="mg-top-25px">
+        @ViewData["Title"].ToString()
+    </h2>
+    @if (Model.Count > 0)
+    {
+        <div class="table-container mg-top-25px">
+            <table class="table" frame="void" rules="rows">
+                <thead>
+                    <tr>
+                        <th>@Html.DisplayNameFor(g => gm.Id)</th>
+                        <th>@Html.DisplayNameFor(g => gm.Platform)</th>
+                        <th>@Html.DisplayNameFor(g => gm.Price)</th>
+                        <th>@Html.DisplayNameFor(g => gm.StockQuantity)</th>
+                        <th>Options</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var game in Model)
+                    {
+                        <tr>
+                            <td data-th="@Html.DisplayNameFor(g => game.Id): &nbsp;">@Html.DisplayFor(p => game.Id)</td>
+                            <td data-th="@Html.DisplayNameFor(g => game.Platform): &nbsp;">@Html.DisplayFor(p => game.Platform.Name)</td>
+                            <td data-th="@Html.DisplayNameFor(g => game.Price): &nbsp;">@Html.DisplayFor(p => game.Price)</td>
+                            <td data-th="@Html.DisplayNameFor(g => game.StockQuantity): &nbsp;">@Html.DisplayFor(p => game.StockQuantity)</td>
+                            <td data-th="Options: &nbsp;">
+                                <a class="btn btn-" asp-action="Edit" asp-route-id="@game.Id">Edit</a>
+                                <a class="btn btn-" asp-action="Delete" asp-route-id="@game.Id">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <h4 class="mg-top-25px">You don't have any game on sales yet</h4>
+    }
+
 </section>
