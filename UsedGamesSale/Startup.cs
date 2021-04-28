@@ -30,7 +30,11 @@ namespace UsedGamesSale
             services.Configure<CookieTempDataProviderOptions>(options => options.Cookie.IsEssential = true);
 
             services.AddControllersWithViews();
-            services.AddSession(options => options.Cookie.IsEssential = true);
+            services.AddSession(options =>
+            {
+                options.Cookie.IsEssential = true;
+                options.IdleTimeout = TimeSpan.FromMinutes(110);
+            });
             services.AddHttpContextAccessor();
             services.AddHttpClient("UsedGamesAPI", opt =>
             {

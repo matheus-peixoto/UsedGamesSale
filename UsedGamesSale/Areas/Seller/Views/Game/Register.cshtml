@@ -1,0 +1,60 @@
+﻿@model Game
+
+@{
+    int imgsPerGame = int.Parse(ViewData["imgsPerProduct"].ToString());
+}
+
+<section class="categories">
+    <aside>
+        <nav>
+            <ul class="flex container">
+                <a href="#">Games</a>
+                <a href="#">Sales</a>
+                <a href="#">Shippings</a>
+            </ul>
+        </nav>
+    </aside>
+</section>
+
+<section class="container register-game">
+    <div class="card">
+        <form method="post" class="form">
+            <div class="form-title">
+                <h2 class="title-color">Register Game</h2>
+            </div>
+
+            <div class="form-control name">
+                <label asp-for="Name" for="name"></label>
+                <input asp-for="Name" placeholder="">
+                <div class="msg-error-sm"><span asp-validation-for="Name"></span></div>
+            </div>
+            <div class="form-control price">
+                <label asp-for="Price"></label>
+                <input asp-for="Price" placeholder="" min="8">
+                <div class="msg-error-sm"><span asp-validation-for="Price"></span></div>
+            </div>
+            <div class="form-control stock">
+                <label asp-for="StockQuantity"></label>
+                <input asp-for="StockQuantity" placeholder="">
+                <div class="msg-error-sm"><span asp-validation-for="StockQuantity"></span></div>
+            </div>
+            <div class="form-control platform">
+                <label asp-for="Platform.Id">Platform</label>
+                <select class="form-control" asp-for="Platform.Id" asp-items="@((SelectList)ViewData["Platforms"])"></select>
+                <div class="msg-error-sm"><span asp-validation-for="Platform.Id"></span></div>
+            </div>
+            <div class="form-control details">
+                <label for="details">Details</label>
+                <textarea id="details" name="details"></textarea>
+                <div class="msg-error-sm"><span asp-validation-for="Password"></span></div>
+            </div>
+            @for (int i = 0; i < imgsPerGame; i++)
+            {
+                <div class="form-control image"></div>
+            }
+
+            <button type="submit" class="btn btn-primary btn-lg">Register</button>
+            <a href="#">Back</a>
+        </form>
+    </div>
+</section>

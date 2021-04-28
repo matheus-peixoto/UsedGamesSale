@@ -12,7 +12,6 @@ namespace UsedGamesSale.Models
         public string Details { get; set; }
         public int StockQuantity { get; set; }
         public List<Order> Order { get; set; }
-        public Seller Seller { get; set; }
         public Platform Platform { get; set; }
     }
 }
