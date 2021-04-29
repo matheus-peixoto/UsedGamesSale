@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using UsedGamesSale.Services.UsedGamesAPI.Responses;
 
 namespace UsedGamesSale.Services.UsedGamesAPI.Interfaces
 {

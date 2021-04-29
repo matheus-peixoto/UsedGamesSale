@@ -1,8 +1,8 @@
 ﻿using UsedGamesSale.Models;
 
-namespace UsedGamesSale.Services.UsedGamesAPI
+namespace UsedGamesSale.Services.UsedGamesAPI.Responses
 {
-    public class UsedGamesAPIResponse
+    public class UsedGamesAPILoginResponse
     {
         public string Message { get; set; }
         public string Token { get; set; }

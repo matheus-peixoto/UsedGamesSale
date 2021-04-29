@@ -8,10 +8,11 @@ using System.Threading.Tasks;
 using UsedGamesSale.Models;
 using UsedGamesSale.Models.DTOs.User;
 using UsedGamesSale.Services.UsedGamesAPI.Interfaces;
+using UsedGamesSale.Services.UsedGamesAPI.Responses;
 
 namespace UsedGamesSale.Services.UsedGamesAPI
 {
-    public class UsedGamesAPISellers : UsedGamesAPI, IUsedGamesAPISellers
+    public class UsedGamesAPISellers : UsedGamesAPILogin, IUsedGamesAPISellers
     {
         public UsedGamesAPISellers(IHttpClientFactory clientFactory) : base(clientFactory, "sellers/") { }
 

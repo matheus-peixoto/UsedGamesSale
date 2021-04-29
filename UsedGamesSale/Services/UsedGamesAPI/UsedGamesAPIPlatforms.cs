@@ -2,31 +2,32 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
-using UsedGamesSale.Models.DTOs.User;
 using UsedGamesSale.Services.UsedGamesAPI.Interfaces;
+using UsedGamesSale.Services.UsedGamesAPI.Responses;
 
 namespace UsedGamesSale.Services.UsedGamesAPI
 {
-    public abstract class UsedGamesAPI : IUsedGamesAPI
+    public class UsedGamesAPIPlatforms : IUsedGamesAPIPlatforms
     {
-        protected readonly HttpClient _client;
+        private readonly HttpClient _client;
 
-        public UsedGamesAPI(IHttpClientFactory clientFactory, string endpoint)
+        public UsedGamesAPIPlatforms(IHttpClientFactory clientFactory)
         {
             _client = clientFactory.CreateClient("UsedGamesAPI");
-            _client.BaseAddress = new Uri(_client.BaseAddress.AbsoluteUri + endpoint);
+            _client.BaseAddress = new Uri(_client.BaseAddress.AbsoluteUri + "platforms");
         }
 
-        public async Task<UsedGamesAPIResponse> LoginAsync(UserLoginDTO userDTO)
+        public async Task<UsedGamesAPIPlatformResponse> GetPlatformsAsync()
         {
-            string jsonUser = JsonConvert.SerializeObject(userDTO);
-            HttpResponseMessage responseMsg = await _client.PostAsync(_client.BaseAddress + "login", new StringContent(jsonUser, Encoding.UTF8, "application/json"));
+            HttpResponseMessage responseMsg = await _client.GetAsync(_client.BaseAddress);
             string responseStr = await responseMsg.Content.ReadAsStringAsync();
-            UsedGamesAPIResponse response = JsonConvert.DeserializeObject<UsedGamesAPIResponse>(responseStr);
+            UsedGamesAPIPlatformResponse response = JsonConvert.DeserializeObject<UsedGamesAPIPlatformResponse>(responseStr);
             response.Success = responseMsg.IsSuccessStatusCode;
+            if (responseMsg.StatusCode == HttpStatusCode.Unauthorized) response.IsUnauthorized = true;
+
             return response;
         }
 

@@ -97,7 +97,7 @@ button {
         }
 
 main {
-    margin-top: 105px;
+    margin: 105px 0 100px;
 }
 
 @media (max-width:1080px) {
@@ -195,10 +195,90 @@ main {
     }
 }
 
+/*----- Register -----*/
+.register-game .card {
+    width: 100%;
+}
+
+.register-game .form .name {
+    width: 48%;
+}
+
+.register-game .form .price {
+    width: 25%;
+}
+
+.register-game .form .stock {
+    width: 25%;
+}
+
+.register-game .form .details {
+    width: 100%;
+}
+
+.register-game .form .platform {
+    width: 50%;
+}
+
+.register-game .form .submit-btn {
+    width: 100%;
+}
+
+.register-game .form .image {
+    width: 23%;
+}
+
+    .register-game .form .image label {
+        margin: 0 auto 10px;
+        display: block;
+    }
+
+@media (max-width: 700px) {
+    .register-game .form .name {
+        width: 60%;
+    }
+
+    .register-game .form .price {
+        width: 35%;
+    }
+
+    .register-game .form .stock {
+        width: 35%;
+    }
+
+    .register-game .form .platform {
+        width: 60%;
+    }
+}
+
+@media (max-width: 600px) {
+    .register-game .form .name {
+        width: 100%;
+    }
+
+    .register-game .form .price {
+        width: 100%;
+    }
+
+    .register-game .form .stock {
+        width: 100%;
+    }
+
+    .register-game .form .platform {
+        width: 100%;
+    }
+}
+
+
 /*----- Footer -----*/
 .footer {
     width: 100%;
-    position: fixed;
+    display: block;
+    position: absolute;
     bottom: 0;
     border-top: 1px solid var(--grey-transparent);
+}
+
+.footer .flex {
+    justify-content: center;
 }

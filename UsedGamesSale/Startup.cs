@@ -42,6 +42,7 @@ namespace UsedGamesSale
             });
             services.AddScoped<UsedGamesAPIClients>();
             services.AddScoped<UsedGamesAPISellers>();
+            services.AddScoped<UsedGamesAPIPlatforms>();
             services.AddScoped<ClientLoginManager>();
             services.AddScoped<SellerLoginManager>();
         }

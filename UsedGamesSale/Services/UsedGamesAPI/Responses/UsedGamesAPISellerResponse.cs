@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using UsedGamesSale.Models;
 
-namespace UsedGamesSale.Services.UsedGamesAPI
+namespace UsedGamesSale.Services.UsedGamesAPI.Responses
 {
     public class UsedGamesAPISellerResponse
     {

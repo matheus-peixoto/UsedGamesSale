@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using UsedGamesSale.Models.DTOs.User;
 using UsedGamesSale.Services.Login;
 using UsedGamesSale.Services.UsedGamesAPI;
+using UsedGamesSale.Services.UsedGamesAPI.Responses;
 
 namespace UsedGamesSale.Controllers
 {
@@ -22,7 +23,7 @@ namespace UsedGamesSale.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             return View();
         }
@@ -38,7 +39,7 @@ namespace UsedGamesSale.Controllers
         {
             if (!ModelState.IsValid) return View(userDTO);
 
-            UsedGamesAPIResponse response = await _usedGamesAPIClients.LoginAsync(userDTO);
+            UsedGamesAPILoginResponse response = await _usedGamesAPIClients.LoginAsync(userDTO);
             if (!response.Success)
             {
                 ViewData["MSG_E"] = response.Message;

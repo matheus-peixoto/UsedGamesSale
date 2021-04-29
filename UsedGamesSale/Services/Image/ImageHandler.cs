@@ -7,18 +7,18 @@ using System.Threading.Tasks;
 
 namespace UsedGamesSale.Services.Image
 {
-    public class ImageManager
+    public class ImageHandler
     {
-        public static RecordResult RecordHandler(string relativePath, IFormFile file)
+        public static RecordResult Record(string relativePath, IFormFile file)
         {
             string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", relativePath);
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
 
-            return Record(file, path, relativePath);
+            return PassImgToComputer(file, path, relativePath);
         }
 
-        private static RecordResult Record(IFormFile file, string path, string relativePath)
+        private static RecordResult PassImgToComputer(IFormFile file, string path, string relativePath)
         {
             string imgPath = Path.Combine(path, file.FileName);
 
@@ -40,6 +40,7 @@ namespace UsedGamesSale.Services.Image
                 result.ErrorMessage = e.Message;
             }
 
+            result.Success = true;
             result.Path = Path.Combine(relativePath, file.FileName);
             return result;
         }

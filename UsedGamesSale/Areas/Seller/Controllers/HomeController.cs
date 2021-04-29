@@ -9,6 +9,7 @@ using UsedGamesSale.Models.DTOs.User;
 using UsedGamesSale.Services.Filters;
 using UsedGamesSale.Services.Login;
 using UsedGamesSale.Services.UsedGamesAPI;
+using UsedGamesSale.Services.UsedGamesAPI.Responses;
 
 namespace UsedGamesSale.Areas.Seller.Controllers
 {
@@ -51,7 +52,7 @@ namespace UsedGamesSale.Areas.Seller.Controllers
         {
             if (!ModelState.IsValid) return View(userDTO);
 
-            UsedGamesAPIResponse response = await _usedGamesAPISellers.LoginAsync(userDTO);
+            UsedGamesAPILoginResponse response = await _usedGamesAPISellers.LoginAsync(userDTO);
             if (!response.Success)
             {
                 ViewData["MSG_E"] = response.Message;

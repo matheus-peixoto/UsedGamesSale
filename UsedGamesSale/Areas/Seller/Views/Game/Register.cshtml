@@ -1,16 +1,16 @@
 ﻿@model Game
 
 @{
-    int imgsPerGame = int.Parse(ViewData["imgsPerProduct"].ToString());
+    int imgsPerGame = int.Parse(ViewData["ImgsPerGame"].ToString());
 }
 
 <section class="categories">
     <aside>
         <nav>
+            <a href="#">Games</a>
+            <a href="#">Sales</a>
+            <a href="#">Shippings</a>
             <ul class="flex container">
-                <a href="#">Games</a>
-                <a href="#">Sales</a>
-                <a href="#">Shippings</a>
             </ul>
         </nav>
     </aside>
@@ -44,17 +44,26 @@
                 <div class="msg-error-sm"><span asp-validation-for="Platform.Id"></span></div>
             </div>
             <div class="form-control details">
-                <label for="details">Details</label>
-                <textarea id="details" name="details"></textarea>
-                <div class="msg-error-sm"><span asp-validation-for="Password"></span></div>
+                <label asp-for="Details">Details</label>
+                <textarea asp-for="Details"></textarea>
+                <div class="msg-error-sm"><span asp-validation-for="Details"></span></div>
             </div>
             @for (int i = 0; i < imgsPerGame; i++)
             {
-                <div class="form-control image"></div>
+                <div class="form-control image">
+                    <label>Select an image</label>
+                    <input class="display-none" type="file" accept="image/*" />
+                    <div class="img-container">
+                        <img data-temp-img="true" src="~/img/default-img.png" />
+                        <button class="display-none btn-danger" type="button">X</button>
+                    </div>
+                </div>
             }
 
-            <button type="submit" class="btn btn-primary btn-lg">Register</button>
-            <a href="#">Back</a>
+            <div class="form-control-submit">
+                <button type="submit" class="btn btn-primary btn-lg">Register</button>
+                <a href="#">Back</a>
+            </div>
         </form>
     </div>
 </section>
