@@ -38,7 +38,7 @@
                 let img = btn.parentElement.querySelector('img')
 
                 let url = new URL(window.location.href)
-                url.pathname = 'Seller/Image/DeleteTempImg'
+                url.pathname = 'Seller/Game/DeleteTempImage'
                 let imgPath = new URL(img.src).pathname.replaceAll('%20', ' ')
                 url.searchParams.set('imgPath', imgPath)
 

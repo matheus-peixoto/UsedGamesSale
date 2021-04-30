@@ -303,9 +303,13 @@
 }
 
 .display-none {
-    display: none;
+    display: none !important;
 }
 
 .cursor-default {
-    cursor: default;
+    cursor: default !important;
+}
+
+.cursor-pointer {
+    cursor: pointer !important;
 }

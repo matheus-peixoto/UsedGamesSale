@@ -1,7 +1,7 @@
-﻿@model Game
+﻿@model RegisterGameViewModel
 
 @{
-    int imgsPerGame = int.Parse(ViewData["ImgsPerGame"].ToString());
+    
 }
 
 <section class="categories">
@@ -24,38 +24,38 @@
             </div>
 
             <div class="form-control name">
-                <label asp-for="Name" for="name"></label>
-                <input asp-for="Name" placeholder="">
-                <div class="msg-error-sm"><span asp-validation-for="Name"></span></div>
+                <label asp-for="Game.Name" for="name"></label>
+                <input asp-for="Game.Name" placeholder="">
+                <div class="msg-error-sm"><span asp-validation-for="Game.Name"></span></div>
             </div>
             <div class="form-control price">
-                <label asp-for="Price"></label>
-                <input asp-for="Price" placeholder="" min="8">
-                <div class="msg-error-sm"><span asp-validation-for="Price"></span></div>
+                <label asp-for="Game.Price"></label>
+                <input asp-for="Game.Price" placeholder="" min="8">
+                <div class="msg-error-sm"><span asp-validation-for="Game.Price"></span></div>
             </div>
             <div class="form-control stock">
-                <label asp-for="StockQuantity"></label>
-                <input asp-for="StockQuantity" placeholder="">
-                <div class="msg-error-sm"><span asp-validation-for="StockQuantity"></span></div>
+                <label asp-for="Game.StockQuantity"></label>
+                <input asp-for="Game.StockQuantity" placeholder="">
+                <div class="msg-error-sm"><span asp-validation-for="Game.StockQuantity"></span></div>
             </div>
             <div class="form-control platform">
-                <label asp-for="Platform.Id">Platform</label>
-                <select class="form-control" asp-for="Platform.Id" asp-items="@((SelectList)ViewData["Platforms"])"></select>
-                <div class="msg-error-sm"><span asp-validation-for="Platform.Id"></span></div>
+                <label asp-for="Game.Platform.Id">Platform</label>
+                <select class="form-control" asp-for="Game.Platform.Id" asp-items="@((SelectList)ViewData["Platforms"])"></select>
+                <div class="msg-error-sm"><span asp-validation-for="Game.Platform.Id"></span></div>
             </div>
             <div class="form-control details">
-                <label asp-for="Details">Details</label>
-                <textarea asp-for="Details"></textarea>
-                <div class="msg-error-sm"><span asp-validation-for="Details"></span></div>
+                <label asp-for="Game.Details">Details</label>
+                <textarea asp-for="Game.Details"></textarea>
+                <div class="msg-error-sm"><span asp-validation-for="Game.Details"></span></div>
             </div>
-            @for (int i = 0; i < imgsPerGame; i++)
+            @for (int i = 0; i < Model.ImgsPerGame; i++)
             {
                 <div class="form-control image">
                     <label>Select an image</label>
                     <input class="display-none" type="file" accept="image/*" />
                     <div class="img-container">
                         <img data-temp-img="true" src="~/img/default-img.png" />
-                        <button class="display-none btn-danger" type="button">X</button>
+                        <button class="display-none btn-danger cursor-pointer" type="button">X</button>
                     </div>
                 </div>
             }

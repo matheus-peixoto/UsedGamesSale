@@ -18,6 +18,22 @@ namespace UsedGamesSale.Services.Image
             return PassImgToComputer(file, path, relativePath);
         }
 
+        public static Result Delete(string imgPath)
+        {
+            Result result = new Result();
+
+            string fullPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", imgPath.TrimStart('/'));
+            if (!File.Exists(fullPath))
+            {
+                result.ErrorMessage = "File does not exist";
+                return result;
+            }
+
+            File.Delete(fullPath);
+            result.Success = true;
+            return result;
+        }
+
         public static Result DeleteImgFolder(string relativePath)
         {
             string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", relativePath);
@@ -59,7 +75,7 @@ namespace UsedGamesSale.Services.Image
                 }
                 else
                     result.ErrorMessage = "This file already exist";
-                    
+
             }
             catch (IOException e)
             {

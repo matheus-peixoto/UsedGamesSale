@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using UsedGamesSale.Models;
+using UsedGamesSale.Models.ViewModels;
 using UsedGamesSale.Services.Filters;
 using UsedGamesSale.Services.Image;
 using UsedGamesSale.Services.Login;
@@ -42,9 +43,9 @@ namespace UsedGamesSale.Areas.Seller.Controllers
            UsedGamesAPIPlatformResponse response = await _usedGamesAPIPlatforms.GetPlatformsAsync();
             if (!response.Success) return RedirectToAction("Error", "Home", new { area = "Seller" });
 
-            ViewData["Platforms"] = new SelectList(response.Platforms, "Id", "Name");
-            ViewData["ImgsPerGame"] = _imgsPerGame;
-            return View();
+            RegisterGameViewModel viewModel = new RegisterGameViewModel() 
+            { Platforms = new SelectList(response.Platforms, "Id", "Name"), ImgsPerGame = _imgsPerGame };
+            return View(viewModel);
         }
 
         [HttpPost]
@@ -58,7 +59,7 @@ namespace UsedGamesSale.Areas.Seller.Controllers
         }
 
         [HttpPost]
-        public IActionResult UploadTempImage(IFormFile img)
+        public IActionResult UploadTempImage([FromForm] IFormFile img)
         {
             string relativeTempPath;
             if (!TempData.ContainsKey("imgTempFolder"))
@@ -73,5 +74,7 @@ namespace UsedGamesSale.Areas.Seller.Controllers
 
             return Ok(new { imgPath = recordResult.Path });
         }
+
+        
     }
 }
