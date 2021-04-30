@@ -36,7 +36,10 @@ namespace UsedGamesSale.Areas.Seller.Controllers
         [HttpGet]
         public async Task<IActionResult> Register()
         {
-            UsedGamesAPIPlatformResponse response = await _usedGamesAPIPlatforms.GetPlatformsAsync();
+            if (TempData.ContainsKey("imgTempFolder"))
+                ImageHandler.DeleteImgFolder(TempData["imgTempFolder"].ToString());
+
+           UsedGamesAPIPlatformResponse response = await _usedGamesAPIPlatforms.GetPlatformsAsync();
             if (!response.Success) return RedirectToAction("Error", "Home", new { area = "Seller" });
 
             ViewData["Platforms"] = new SelectList(response.Platforms, "Id", "Name");

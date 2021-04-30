@@ -305,3 +305,7 @@
 .display-none {
     display: none;
 }
+
+.cursor-default {
+    cursor: default;
+}
