@@ -75,6 +75,13 @@ namespace UsedGamesSale.Areas.Seller.Controllers
             return Ok(new { imgPath = recordResult.Path });
         }
 
-        
+        [HttpGet]
+        public IActionResult DeleteTempImage([FromQuery] string imgPath)
+        {
+            Result result = ImageHandler.Delete(imgPath);
+            if (!result.Success) return BadRequest(result.ErrorMessage);
+
+            return Ok();
+        }
     }
 }
