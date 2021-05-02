@@ -48,6 +48,7 @@ namespace UsedGamesSale.Areas.Seller.Controllers
         }
 
         [HttpPost]
+        [ConfigureSuccessMsg("Successfully logged")]
         public async Task<IActionResult> Login(UserLoginDTO userDTO)
         {
             if (!ModelState.IsValid) return View(userDTO);
@@ -61,8 +62,6 @@ namespace UsedGamesSale.Areas.Seller.Controllers
 
             _sellerLoginManager.Login(response.User, response.Token);
             User user = _sellerLoginManager.GetUser();
-            TempData.Remove("MSG_S");
-            TempData.Add("MSG_S", "Successfully logged");
             return RedirectToAction(nameof(Index), "Home", new { area = "Seller" });
         }
 

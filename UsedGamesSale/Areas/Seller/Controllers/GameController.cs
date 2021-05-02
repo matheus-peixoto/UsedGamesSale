@@ -54,12 +54,12 @@ namespace UsedGamesSale.Areas.Seller.Controllers
 
         [HttpPost]
         [ValidateGameOnRegister(_tempFolderKey)]
+        [ConfigureSuccessMsg("Game successfully registered")]
         public async Task<IActionResult> Register(Game game)
         {
             Result result = ImageHandler.MoveTempImgs(1, TempData[_tempFolderKey].ToString(), _configuration.GetValue<string>("Game:ImgFolder"));
             if (!result.Success) return RedirectToAction("Error", "Home", new { area = "Seller" });
 
-            TempData["MSG_S"] = "Game successfully registered";
             return RedirectToAction("Index", "Home", new { area = "Seller" });
         }
 
@@ -69,11 +69,11 @@ namespace UsedGamesSale.Areas.Seller.Controllers
             string relativeTempPath;
             if (!TempData.ContainsKey("imgTempFolder"))
             {
-                relativeTempPath = $"{_configuration.GetValue<string>("Game:ImgTempFolder")}/{Guid.NewGuid()}";
+                relativeTempPath = $"{_configuration.GetValue<string>("Game:ImgTempFolder")}/{_sellerLoginManager.GetUserId()}";
                 TempData["imgTempFolder"] = relativeTempPath;
             }
-            relativeTempPath = TempData.Peek("imgTempFolder").ToString();
 
+            relativeTempPath = TempData.Peek("imgTempFolder").ToString();
             RecordResult recordResult = ImageHandler.Record(relativeTempPath, img);
             if (!recordResult.Success) return BadRequest();
 

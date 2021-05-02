@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using UsedGamesSale.Models.DTOs.User;
+using UsedGamesSale.Services.Filters;
 using UsedGamesSale.Services.Login;
 using UsedGamesSale.Services.UsedGamesAPI;
 using UsedGamesSale.Services.UsedGamesAPI.Responses;
@@ -36,6 +37,7 @@ namespace UsedGamesSale.Controllers
         }
 
         [HttpPost]
+        [ConfigureSuccessMsg("Successfully logged")]
         public async Task<IActionResult> Login(UserLoginDTO userDTO)
         {
             if (!ModelState.IsValid) return View(userDTO);
@@ -48,9 +50,6 @@ namespace UsedGamesSale.Controllers
             }
 
             _clientLoginManager.Login(response.User, response.Token);
-
-            TempData.Remove("MSG_S");
-            TempData.Add("MSG_S", "Successfully logged");
             return RedirectToAction(nameof(Index));
         }
     }
