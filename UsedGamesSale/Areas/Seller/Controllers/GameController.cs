@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using UsedGamesSale.Models;
 using UsedGamesSale.Models.ViewModels;
 using UsedGamesSale.Services.Filters;
+using UsedGamesSale.Services.Filters.Game;
 using UsedGamesSale.Services.Image;
 using UsedGamesSale.Services.Login;
 using UsedGamesSale.Services.UsedGamesAPI;
@@ -25,6 +26,7 @@ namespace UsedGamesSale.Areas.Seller.Controllers
         private readonly int _imgsPerGame;
         private readonly IConfiguration _configuration;
         private SellerLoginManager _sellerLoginManager;
+        private const string _tempFolderKey = "ImgTempFolder";
 
         public GameController(UsedGamesAPIPlatforms usedGamesAPIPlatforms, IConfiguration configuration, SellerLoginManager sellerLoginManager)
         {
@@ -37,25 +39,28 @@ namespace UsedGamesSale.Areas.Seller.Controllers
         [HttpGet]
         public async Task<IActionResult> Register()
         {
-            if (TempData.ContainsKey("imgTempFolder"))
-                ImageHandler.DeleteImgFolder(TempData["imgTempFolder"].ToString());
+            if (TempData.ContainsKey(_tempFolderKey))
+                ImageHandler.DeleteImgFolder(TempData[_tempFolderKey].ToString());
 
-           UsedGamesAPIPlatformResponse response = await _usedGamesAPIPlatforms.GetPlatformsAsync();
-            if (!response.Success) return RedirectToAction("Error", "Home", new { area = "Seller" });
+            UsedGamesAPIPlatformResponse response = await _usedGamesAPIPlatforms.GetPlatformsAsync();
+            RegisterGameViewModel viewModel = new RegisterGameViewModel()
+            {
+                Platforms = new SelectList(response.Platforms, "Id", "Name"),
+                ImgsPerGame = _imgsPerGame
+            };
 
-            RegisterGameViewModel viewModel = new RegisterGameViewModel() 
-            { Platforms = new SelectList(response.Platforms, "Id", "Name"), ImgsPerGame = _imgsPerGame };
             return View(viewModel);
         }
 
         [HttpPost]
+        [ValidateGameOnRegister(_tempFolderKey)]
         public async Task<IActionResult> Register(Game game)
         {
-            UsedGamesAPIPlatformResponse response = await _usedGamesAPIPlatforms.GetPlatformsAsync();
-            if (!response.Success) return RedirectToAction("Error", "Home", new { area = "Seller" });
+            Result result = ImageHandler.MoveTempImgs(1, TempData[_tempFolderKey].ToString(), _configuration.GetValue<string>("Game:ImgFolder"));
+            if (!result.Success) return RedirectToAction("Error", "Home", new { area = "Seller" });
 
-            ViewData["Platforms"] = new SelectList(response.Platforms, "Id", "Name");
-            return View();
+            TempData["MSG_S"] = "Game successfully registered";
+            return RedirectToAction("Index", "Home", new { area = "Seller" });
         }
 
         [HttpPost]

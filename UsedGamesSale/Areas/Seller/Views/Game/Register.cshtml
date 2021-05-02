@@ -23,6 +23,13 @@
                 <h2 class="title-color">Register Game</h2>
             </div>
 
+            @if (ViewData.ContainsKey("MSG_E"))
+            {
+                <div class="form-control">
+                    <div class="msg-error">@ViewData["MSG_E"].ToString()</div>
+                </div>
+            }
+
             <div class="form-control name">
                 <label asp-for="Game.Name" for="name"></label>
                 <input asp-for="Game.Name" placeholder="">

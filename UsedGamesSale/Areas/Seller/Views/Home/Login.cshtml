@@ -26,13 +26,11 @@
                 <input id="password" asp-for="Password" type="password" placeholder="Password" maxlength="20" min="8">
                 <div class="msg-error-sm"><span asp-validation-for="Password"></span></div>
             </div>
-            <div class="form-control flex">
-                <div class="flex">
-                    <input id="showpasswordBtn" type="radio">
-                    <label for="showpasswordBtn"> Show password</label>
-                </div>
-                <a href="">Forgot password?</a>
+            <div class="flex mg-bottom-5px">
+                <input id="showpasswordBtn" type="radio">
+                <label for="showpasswordBtn">Show password</label>
             </div>
+            <a href="" class="mg-bottom-5px">Forgot password?</a>
             <button type="submit" class="btn btn-block btn-primary">Login</button>
         </form>
     </div>

@@ -4,11 +4,18 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using UsedGamesSale.Models;
 
 namespace UsedGamesSale.Services.Image
 {
     public class ImageHandler
     {
+        public static string[] GetAllTempImages(string relativePath)
+        {
+            string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", relativePath);
+            return Directory.GetFiles(path);
+        }
+
         public static RecordResult Record(string relativePath, IFormFile file)
         {
             string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", relativePath);
@@ -16,6 +23,31 @@ namespace UsedGamesSale.Services.Image
                 Directory.CreateDirectory(path);
 
             return PassImgToComputer(file, path, relativePath);
+        }
+
+        public static Result MoveTempImgs(int gameId, string relativeTempImgPath, string relativePath)
+        {
+            Result result = new Result();
+
+            string tempImgsPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", relativeTempImgPath);
+            string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", relativePath, gameId.ToString());
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+
+            if (!Directory.Exists(tempImgsPath))
+            {
+                result.ErrorMessage = "Temp folder does not exists";
+                return result;
+            }
+
+            string[] imgs = Directory.GetFiles(tempImgsPath);
+            foreach (string img in imgs)
+            {
+                File.Copy(img, $"{path}/{Path.GetFileName(img)}");
+            }
+
+            result.Success = true;
+            return result;
         }
 
         public static Result Delete(string imgPath)
