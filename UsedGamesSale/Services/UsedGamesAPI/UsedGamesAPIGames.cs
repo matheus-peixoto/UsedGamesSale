@@ -1,7 +1,5 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,8 +24,11 @@ namespace UsedGamesSale.Services.UsedGamesAPI
             ConfigureToken(token);
             string jsonGame = JsonConvert.SerializeObject(game);
             HttpResponseMessage responseMsg = await _client.PostAsync(_client.BaseAddress, new StringContent(jsonGame, Encoding.UTF8, "application/json"));
-            UsedGamesAPIResponse response = new UsedGamesAPIResponse() { Success = responseMsg.IsSuccessStatusCode };
-            return (UsedGamesAPIGameResponse)response;
+            string responseStr = await responseMsg.Content.ReadAsStringAsync();
+            UsedGamesAPIGameResponse response = new UsedGamesAPIGameResponse() { Success = responseMsg.IsSuccessStatusCode };
+            if (response.Success) response.Game = JsonConvert.DeserializeObject<Game>(responseStr);
+
+            return response;
         }
 
         private void ConfigureToken(string value)

@@ -1,7 +1,7 @@
 ﻿@model RegisterGameViewModel
 
 @{
-    
+    int sellerId = (int)ViewData["SellerId"];
 }
 
 <section class="categories">
@@ -30,6 +30,7 @@
                 </div>
             }
 
+            <input type="hidden" asp-for="Game.SellerId" value="@sellerId" />
             <div class="form-control name">
                 <label asp-for="Game.Name" for="name"></label>
                 <input asp-for="Game.Name" placeholder="">
@@ -46,9 +47,9 @@
                 <div class="msg-error-sm"><span asp-validation-for="Game.StockQuantity"></span></div>
             </div>
             <div class="form-control platform">
-                <label asp-for="Game.Platform.Id">Platform</label>
-                <select class="form-control" asp-for="Game.Platform.Id" asp-items="@((SelectList)ViewData["Platforms"])"></select>
-                <div class="msg-error-sm"><span asp-validation-for="Game.Platform.Id"></span></div>
+                <label asp-for="Game.PlatformId">Platform</label>
+                <select class="form-control" asp-for="Game.PlatformId" asp-items="@Model.Platforms"></select>
+                <div class="msg-error-sm"><span asp-validation-for="Game.PlatformId"></span></div>
             </div>
             <div class="form-control details">
                 <label asp-for="Game.Details">Details</label>

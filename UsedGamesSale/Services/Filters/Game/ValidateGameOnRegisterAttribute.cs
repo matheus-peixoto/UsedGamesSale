@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using UsedGamesSale.Services.UsedGamesAPI;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Http;
+using UsedGamesSale.Services.Login;
 
 namespace UsedGamesSale.Services.Filters.Game
 {
@@ -27,19 +28,22 @@ namespace UsedGamesSale.Services.Filters.Game
 
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
+            SellerLoginManager loginManager = (SellerLoginManager)context.HttpContext.RequestServices.GetService(typeof(SellerLoginManager));
             Controller controller = (Controller)context.Controller;
             int imgsPerGame = GetImgsPerGame(context);
+
+            Models.Game game = (Models.Game)context.ActionArguments["game"];
+            if (game.SellerId != loginManager.GetUserId()) context.Result = new BadRequestResult();
 
             string[] tempImgPaths = GetTempImgsPaths(controller);
             if (!context.ModelState.IsValid || tempImgPaths.Length < imgsPerGame)
             {
                 if (tempImgPaths.Length < imgsPerGame) controller.ViewData["MSG_E"] = $"You need to have {imgsPerGame} images for the product";
 
+                controller.ViewData["SellerId"] = loginManager.GetUserId();
                 UsedGamesAPIPlatformResponse response = await GetPlatformsAsync(context);
-
                 if (!response.Success) context.Result = new RedirectToActionResult("Error", "Home", new { area = "Seller" });
 
-                Models.Game game = (Models.Game)context.ActionArguments["game"];
                 SelectList platforms = new SelectList(response.Platforms, "Id", "Name");
                 RegisterGameViewModel viewModel = new RegisterGameViewModel(game, platforms, imgsPerGame, tempImgPaths);
                 context.Result = controller.View(viewModel);

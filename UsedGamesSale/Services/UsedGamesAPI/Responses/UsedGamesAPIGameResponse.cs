@@ -8,6 +8,7 @@ namespace UsedGamesSale.Services.UsedGamesAPI.Responses
 {
     public class UsedGamesAPIGameResponse : UsedGamesAPIResponse
     {
+        public Game Game { get; set; }
         public List<Game> Games { get; set; }
     }
 }

@@ -48,6 +48,7 @@ namespace UsedGamesSale.Areas.Seller.Controllers
             UsedGamesAPIPlatformResponse response = await _usedGamesAPIPlatforms.GetPlatformsAsync();
             RegisterGameViewModel viewModel = new RegisterGameViewModel(new SelectList(response.Platforms, "Id", "Name"), _imgsPerGame);
 
+            ViewData["SellerId"] = _sellerLoginManager.GetUserId();
             return View(viewModel);
         }
 
@@ -56,11 +57,11 @@ namespace UsedGamesSale.Areas.Seller.Controllers
         [ConfigureSuccessMsg("Game successfully registered")]
         public async Task<IActionResult> Register(Game game)
         {
-            Result result = ImageHandler.MoveTempImgs(1, TempData[_tempFolderKey].ToString(), _configuration.GetValue<string>("Game:ImgFolder"));
-            if (!result.Success) return RedirectToAction("Error", "Home", new { area = "Seller" });
-
             UsedGamesAPIGameResponse response = await _usedGamesAPIGames.CreateGameAsync(game, _sellerLoginManager.GetUserToken());
             if (!response.Success) return RedirectToAction("Error", "Home", new { area = "Seller" });
+
+            Result result = ImageHandler.MoveTempImgs(response.Game.Id, TempData[_tempFolderKey].ToString(), _configuration.GetValue<string>("Game:ImgFolder"));
+            if (!result.Success) return RedirectToAction("Error", "Home", new { area = "Seller" });
 
             return RedirectToAction("Index", "Home", new { area = "Seller" });
         }
@@ -77,7 +78,7 @@ namespace UsedGamesSale.Areas.Seller.Controllers
 
             relativeTempPath = TempData.Peek("imgTempFolder").ToString();
             RecordResult recordResult = ImageHandler.Record(relativeTempPath, img);
-            if (!recordResult.Success) return BadRequest();
+            if (!recordResult.Success) return BadRequest(new { errorMsg = recordResult.ErrorMessage });
 
             return Ok(new { imgPath = recordResult.Path });
         }
