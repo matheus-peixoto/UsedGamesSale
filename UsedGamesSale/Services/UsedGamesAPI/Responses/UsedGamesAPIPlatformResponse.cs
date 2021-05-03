@@ -6,10 +6,9 @@ using UsedGamesSale.Models;
 
 namespace UsedGamesSale.Services.UsedGamesAPI.Responses
 {
-    public class UsedGamesAPIPlatformResponse 
+    public class UsedGamesAPIPlatformResponse : UsedGamesAPIResponse
     {
         public List<Platform> Platforms { get; set; }
-        public bool Success { get; set; }
         public bool IsUnauthorized { get; set; }
     }
 }

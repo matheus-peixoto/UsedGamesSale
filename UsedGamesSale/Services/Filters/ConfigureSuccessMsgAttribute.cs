@@ -20,9 +20,13 @@ namespace UsedGamesSale.Services.Filters
 
         public void OnActionExecuted(ActionExecutedContext context)
         {
-            Controller controller = (Controller)context.Controller;
-            controller.TempData.Remove("MSG_S");
-            controller.TempData["MSG_S"] = _msg;
+            //context.
+            if (!context.Canceled && context.HttpContext.Response.StatusCode == 200 && !(context.Result is null))
+            {
+                Controller controller = (Controller)context.Controller;
+                controller.TempData.Remove("MSG_S");
+                controller.TempData["MSG_S"] = _msg;
+            }
         }
     }
 }

@@ -11,6 +11,7 @@ using UsedGamesSale.Models;
 using UsedGamesSale.Models.ViewModels;
 using UsedGamesSale.Services.Filters;
 using UsedGamesSale.Services.Filters.Game;
+using UsedGamesSale.Services.Filters.Seller;
 using UsedGamesSale.Services.Image;
 using UsedGamesSale.Services.Login;
 using UsedGamesSale.Services.UsedGamesAPI;
@@ -22,15 +23,17 @@ namespace UsedGamesSale.Areas.Seller.Controllers
     [ValidateSellerLogin]
     public class GameController : Controller
     {
+        private readonly UsedGamesAPIGames _usedGamesAPIGames;
         private readonly UsedGamesAPIPlatforms _usedGamesAPIPlatforms;
         private readonly int _imgsPerGame;
         private readonly IConfiguration _configuration;
         private SellerLoginManager _sellerLoginManager;
         private const string _tempFolderKey = "ImgTempFolder";
 
-        public GameController(UsedGamesAPIPlatforms usedGamesAPIPlatforms, IConfiguration configuration, SellerLoginManager sellerLoginManager)
+        public GameController(UsedGamesAPIPlatforms usedGamesAPIPlatforms, UsedGamesAPIGames usedGamesAPIGames, IConfiguration configuration, SellerLoginManager sellerLoginManager)
         {
             _usedGamesAPIPlatforms = usedGamesAPIPlatforms;
+            _usedGamesAPIGames = usedGamesAPIGames;
             _configuration = configuration;
             _imgsPerGame = configuration.GetValue<int>("Game:ImgsPerGame");
             _sellerLoginManager = sellerLoginManager;
@@ -43,11 +46,7 @@ namespace UsedGamesSale.Areas.Seller.Controllers
                 ImageHandler.DeleteImgFolder(TempData[_tempFolderKey].ToString());
 
             UsedGamesAPIPlatformResponse response = await _usedGamesAPIPlatforms.GetPlatformsAsync();
-            RegisterGameViewModel viewModel = new RegisterGameViewModel()
-            {
-                Platforms = new SelectList(response.Platforms, "Id", "Name"),
-                ImgsPerGame = _imgsPerGame
-            };
+            RegisterGameViewModel viewModel = new RegisterGameViewModel(new SelectList(response.Platforms, "Id", "Name"), _imgsPerGame);
 
             return View(viewModel);
         }
@@ -59,6 +58,9 @@ namespace UsedGamesSale.Areas.Seller.Controllers
         {
             Result result = ImageHandler.MoveTempImgs(1, TempData[_tempFolderKey].ToString(), _configuration.GetValue<string>("Game:ImgFolder"));
             if (!result.Success) return RedirectToAction("Error", "Home", new { area = "Seller" });
+
+            UsedGamesAPIGameResponse response = await _usedGamesAPIGames.CreateGameAsync(game, _sellerLoginManager.GetUserToken());
+            if (!response.Success) return RedirectToAction("Error", "Home", new { area = "Seller" });
 
             return RedirectToAction("Index", "Home", new { area = "Seller" });
         }

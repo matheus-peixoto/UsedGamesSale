@@ -15,6 +15,12 @@ namespace UsedGamesSale.Models.ViewModels
 
         public RegisterGameViewModel() { }
 
+        public RegisterGameViewModel(SelectList platforms, int imgsPerGame)
+        {
+            Platforms = platforms;
+            ImgsPerGame = imgsPerGame;
+        }
+
         public RegisterGameViewModel(Game game, SelectList platforms, int imgsPerGame, string[] tempImgsPaths)
         {
             Game = game;

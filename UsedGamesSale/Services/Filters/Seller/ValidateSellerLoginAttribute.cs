@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using System;
 using UsedGamesSale.Services.Login;
 
-namespace UsedGamesSale.Services.Filters
+namespace UsedGamesSale.Services.Filters.Seller
 {
     public class ValidateSellerLoginAttribute : Attribute, IAuthorizationFilter
     {

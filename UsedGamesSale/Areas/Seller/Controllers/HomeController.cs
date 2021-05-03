@@ -1,12 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using UsedGamesSale.Models;
 using UsedGamesSale.Models.DTOs.User;
 using UsedGamesSale.Services.Filters;
+using UsedGamesSale.Services.Filters.Seller;
 using UsedGamesSale.Services.Login;
 using UsedGamesSale.Services.UsedGamesAPI;
 using UsedGamesSale.Services.UsedGamesAPI.Responses;
@@ -30,13 +27,7 @@ namespace UsedGamesSale.Areas.Seller.Controllers
         public async Task<IActionResult> Index()
         {
             UsedGamesAPISellerResponse response = await _usedGamesAPISellers.GetGamesAsync(_sellerLoginManager.GetUserId(), _sellerLoginManager.GetUserToken());
-            if (!response.Success)
-            {
-                if (response.IsUnauthorized)
-                    return RedirectToAction(nameof(Login), "Home", new { area = "Seller" });
-                else
-                    return RedirectToAction(nameof(Error), "Home", new { area = "Seller" });
-            }
+            if (!response.Success) return RedirectToAction(nameof(Error), "Home", new { area = "Seller" });
                 
             return View(response.Games);
         }
