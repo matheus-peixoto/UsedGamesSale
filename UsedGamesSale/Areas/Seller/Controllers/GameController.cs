@@ -54,6 +54,7 @@ namespace UsedGamesSale.Areas.Seller.Controllers
 
         [HttpPost]
         [ValidateGameOnRegister(_tempFolderKey)]
+        [AddGamePostDate]
         [ConfigureSuccessMsg("Game successfully registered")]
         public async Task<IActionResult> Register(Game game)
         {
