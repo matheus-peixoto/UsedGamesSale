@@ -46,9 +46,10 @@ namespace UsedGamesSale.Areas.Seller.Controllers
                 ImageHandler.DeleteImgFolder(TempData[_tempFolderKey].ToString());
 
             UsedGamesAPIPlatformResponse response = await _usedGamesAPIPlatforms.GetPlatformsAsync();
-            RegisterGameViewModel viewModel = new RegisterGameViewModel(new SelectList(response.Platforms, "Id", "Name"), _imgsPerGame);
-
-            ViewData["SellerId"] = _sellerLoginManager.GetUserId();
+            GameViewModel viewModel = new GameViewModel
+            (
+                platforms: new SelectList(response.Platforms, "Id", "Name"), imgsPerGame: _imgsPerGame, sellerId: _sellerLoginManager.GetUserId()
+            );
             return View(viewModel);
         }
 
@@ -58,7 +59,7 @@ namespace UsedGamesSale.Areas.Seller.Controllers
         [ConfigureSuccessMsg("Game successfully registered")]
         public async Task<IActionResult> Register(Game game)
         {
-            UsedGamesAPIGameResponse response = await _usedGamesAPIGames.CreateGameAsync(game, _sellerLoginManager.GetUserToken());
+            UsedGamesAPIGameResponse response = await _usedGamesAPIGames.CreateAsync(game, _sellerLoginManager.GetUserToken());
             if (!response.Success) return RedirectToAction("Error", "Home", new { area = "Seller" });
 
             Result result = ImageHandler.MoveTempImgs(response.Game.Id, TempData[_tempFolderKey].ToString(), _configuration.GetValue<string>("Game:ImgFolder"));

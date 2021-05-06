@@ -45,7 +45,7 @@ namespace UsedGamesSale.Services.Filters.Game
                 if (!response.Success) context.Result = new RedirectToActionResult("Error", "Home", new { area = "Seller" });
 
                 SelectList platforms = new SelectList(response.Platforms, "Id", "Name");
-                RegisterGameViewModel viewModel = new RegisterGameViewModel(game, platforms, imgsPerGame, tempImgPaths);
+                GameViewModel viewModel = new GameViewModel(game, platforms, imgsPerGame, tempImgPaths, loginManager.GetUserId());
                 context.Result = controller.View(viewModel);
             }
             else
@@ -57,7 +57,7 @@ namespace UsedGamesSale.Services.Filters.Game
         private string[] GetTempImgsPaths(Controller controller) 
         {
             ITempDataDictionary tempData = controller.TempData;
-            return tempData.ContainsKey(_tempFolderKey) ? ImageHandler.GetAllTempImages(tempData.Peek(_tempFolderKey).ToString()) : new string[0]; 
+            return tempData.ContainsKey(_tempFolderKey) ? ImageHandler.GetAllTempImageRelativePaths(tempData.Peek(_tempFolderKey).ToString()) : new string[0]; 
         }
 
         private int GetImgsPerGame(ActionExecutingContext context)

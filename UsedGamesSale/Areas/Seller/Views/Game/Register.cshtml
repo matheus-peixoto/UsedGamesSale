@@ -1,7 +1,6 @@
-﻿@model RegisterGameViewModel
+﻿@model GameViewModel
 
 @{
-    int sellerId = (int)ViewData["SellerId"];
 }
 
 <section class="categories">
@@ -30,7 +29,7 @@
                 </div>
             }
 
-            <input type="hidden" asp-for="Game.SellerId" value="@sellerId" />
+            <input type="hidden" asp-for="Game.SellerId" value="@Model.SellerId" />
             <div class="form-control name">
                 <label asp-for="Game.Name" for="name"></label>
                 <input asp-for="Game.Name" placeholder="">
@@ -58,14 +57,28 @@
             </div>
             @for (int i = 0; i < Model.ImgsPerGame; i++)
             {
-                <div class="form-control image">
-                    <label>Select an image</label>
-                    <input class="display-none" type="file" accept="image/*" />
-                    <div class="img-container">
-                        <img data-temp-img="true" src="~/img/default-img.png" />
-                        <button class="display-none btn-danger cursor-pointer" type="button">X</button>
+                if (Model.TempImgsPaths is null ? false : Model.TempImgsPaths.Length > i)
+                {
+                    <div class="form-control image">
+                        <label class="display-none">Select an image</label>
+                        <input class="display-none" type="file" accept="image/*" />
+                        <div class="img-container">
+                            <img src="@Model.TempImgsPaths[i]" />
+                            <button class="btn-danger cursor-pointer" type="button">X</button>
+                        </div>
                     </div>
-                </div>
+                }
+                else
+                {
+                    <div class="form-control image">
+                        <label>Select an image</label>
+                        <input class="display-none" type="file" accept="image/*" />
+                        <div class="img-container">
+                            <img src="~/img/default-img.png" />
+                            <button class="display-none btn-danger cursor-pointer" type="button">X</button>
+                        </div>
+                    </div>
+                }
             }
 
             <div class="form-control-submit">

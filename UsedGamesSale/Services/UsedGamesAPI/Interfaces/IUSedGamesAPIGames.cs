@@ -6,6 +6,6 @@ namespace UsedGamesSale.Services.UsedGamesAPI.Interfaces
 {
     public interface IUSedGamesAPIGames
     {
-        public Task<UsedGamesAPIGameResponse> CreateGameAsync(Game game, string token);
+        public Task<UsedGamesAPIGameResponse> CreateAsync(Game game, string token);
     }
 }

@@ -10,10 +10,16 @@ namespace UsedGamesSale.Services.Image
 {
     public class ImageHandler
     {
-        public static string[] GetAllTempImages(string relativePath)
+        public static string[] GetAllTempImageRelativePaths(string relativePath)
         {
             string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", relativePath);
-            return Directory.GetFiles(path);
+            string[] files = Directory.GetFiles(path);
+            for (int i = 0; i < files.Length; i++)
+            {
+                files[i] = $"/{relativePath}/{Path.GetFileName(files[i])}";
+            }
+
+            return files;
         }
 
         public static RecordResult Record(string relativePath, IFormFile file)

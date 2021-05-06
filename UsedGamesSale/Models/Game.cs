@@ -9,7 +9,7 @@ namespace UsedGamesSale.Models
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Filed {0} is required")]
-        [StringLength(50, MinimumLength = 2, ErrorMessage = "Filed {0} needs to be at least {2} and at most {1}")]
+        [StringLength(50, MinimumLength = 2, ErrorMessage = "Field {0} needs to be at least {2} and at most {1}")]
         public string Name { get; set; }
 
         [Required(ErrorMessage = "Field {0} is required")]
