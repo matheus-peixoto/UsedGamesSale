@@ -20,7 +20,7 @@ namespace UsedGamesSale.Services.UsedGamesAPI
             _client.BaseAddress = new Uri(_client.BaseAddress.AbsoluteUri + "games/");
         }
 
-        public async Task<UsedGamesAPIGameResponse> Get(int id, string token)
+        public async Task<UsedGamesAPIGameResponse> GetAsync(int id, string token)
         {
             ConfigureToken(token);
             HttpResponseMessage responseMsg = await _client.GetAsync(_client.BaseAddress.AbsoluteUri + id);
@@ -30,7 +30,7 @@ namespace UsedGamesSale.Services.UsedGamesAPI
             return response;
         }
 
-            public async Task<UsedGamesAPIGameResponse> CreateAsync(Game game, string token)
+        public async Task<UsedGamesAPIGameResponse> CreateAsync(Game game, string token)
         {
             ConfigureToken(token);
             string jsonGame = JsonConvert.SerializeObject(game);

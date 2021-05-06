@@ -30,7 +30,7 @@ namespace UsedGamesSale.Areas.Seller.Controllers
         private SellerLoginManager _sellerLoginManager;
         private const string _tempFolderKey = "ImgTempFolder";
 
-        public GameController(UsedGamesAPIPlatforms usedGamesAPIPlatforms, UsedGamesAPIGames usedGamesAPIGames, IConfiguration configuration, SellerLoginManager sellerLoginManager)
+        public GameController(UsedGamesAPIGames usedGamesAPIGames, UsedGamesAPIPlatforms usedGamesAPIPlatforms, IConfiguration configuration, SellerLoginManager sellerLoginManager)
         {
             _usedGamesAPIPlatforms = usedGamesAPIPlatforms;
             _usedGamesAPIGames = usedGamesAPIGames;
@@ -59,6 +59,12 @@ namespace UsedGamesSale.Areas.Seller.Controllers
         [ConfigureSuccessMsg("Game successfully registered")]
         public async Task<IActionResult> Register(Game game)
         {
+            string[] relativePaths = ImageHandler.GetAllTempImageRelativePaths(TempData[_tempFolderKey].ToString());
+            game.Images = new List<Image>();
+            foreach (var relativePath in relativePaths)
+            {
+                game.Images.Add(new Image(relativePath));
+            }
             UsedGamesAPIGameResponse response = await _usedGamesAPIGames.CreateAsync(game, _sellerLoginManager.GetUserToken());
             if (!response.Success) return RedirectToAction("Error", "Home", new { area = "Seller" });
 

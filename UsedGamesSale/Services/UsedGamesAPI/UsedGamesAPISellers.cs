@@ -14,7 +14,7 @@ namespace UsedGamesSale.Services.UsedGamesAPI
 {
     public class UsedGamesAPISellers : UsedGamesAPILogin, IUsedGamesAPISellers
     {
-        public UsedGamesAPISellers(IHttpClientFactory clientFactory) : base(clientFactory, "sellers/") { }
+        public UsedGamesAPISellers(IHttpClientFactory clientFactory) : base(clientFactory, "sellers") { }
 
         public async Task<UsedGamesAPISellerResponse> GetGamesAsync(int sellerId, string token)
         {

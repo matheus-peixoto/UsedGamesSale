@@ -56,11 +56,10 @@ namespace UsedGamesSale.Services.Image
             return result;
         }
 
-        public static Result Delete(string imgPath)
+        public static Result Delete(string relativeImgPath)
         {
             Result result = new Result();
-
-            string fullPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", imgPath.TrimStart('/'));
+            string fullPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", relativeImgPath.TrimStart('/'));
             if (!File.Exists(fullPath))
             {
                 result.ErrorMessage = "File does not exist";

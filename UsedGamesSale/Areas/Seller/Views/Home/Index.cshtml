@@ -45,17 +45,17 @@
                 <tbody>
                     @foreach (var game in Model)
                     {
-                    <tr>
-                        <td data-th="@Html.DisplayNameFor(g => game.Id): &nbsp;">@Html.DisplayFor(p => game.Id)</td>
-                        <td data-th="@Html.DisplayNameFor(g => game.Platform): &nbsp;">@Html.DisplayFor(p => game.Name)</td>
-                        <td data-th="@Html.DisplayNameFor(g => game.Platform): &nbsp;">@Html.DisplayFor(p => game.Platform.Name)</td>
-                        <td data-th="@Html.DisplayNameFor(g => game.Price): &nbsp;">@Html.DisplayFor(p => game.Price)</td>
-                        <td data-th="@Html.DisplayNameFor(g => game.StockQuantity): &nbsp;">@Html.DisplayFor(p => game.StockQuantity)</td>
-                        <td data-th="Options: &nbsp;">
-                            <a class="btn btn-" asp-action="Edit" asp-route-id="@game.Id">Edit</a>
-                            <a class="btn btn-" asp-action="Delete" asp-route-id="@game.Id">Delete</a>
-                        </td>
-                    </tr>
+                        <tr>
+                            <td data-th="@Html.DisplayNameFor(g => game.Id): &nbsp;">@Html.DisplayFor(p => game.Id)</td>
+                            <td data-th="@Html.DisplayNameFor(g => game.Platform): &nbsp;">@Html.DisplayFor(p => game.Name)</td>
+                            <td data-th="@Html.DisplayNameFor(g => game.Platform): &nbsp;">@Html.DisplayFor(p => game.Platform.Name)</td>
+                            <td data-th="@Html.DisplayNameFor(g => game.Price): &nbsp;">@Html.DisplayFor(p => game.Price)</td>
+                            <td data-th="@Html.DisplayNameFor(g => game.StockQuantity): &nbsp;">@Html.DisplayFor(p => game.StockQuantity)</td>
+                            <td data-th="Options: &nbsp;">
+                                <a class="btn btn-" asp-controller="Game" asp-action="Edit" asp-route-id="@game.Id">Edit</a>
+                                <a class="btn btn-" asp-controller="Game" asp-action="Delete" asp-route-id="@game.Id">Delete</a>
+                            </td>
+                        </tr>
                     }
                 </tbody>
             </table>
