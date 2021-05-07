@@ -31,9 +31,9 @@ namespace UsedGamesSale.Services.Image
             return PassImgToComputer(file, path, relativePath);
         }
 
-        public static Result MoveTempImgs(int gameId, string relativeTempImgPath, string relativePath)
+        public static RecordResult MoveTempImgs(int gameId, string relativeTempImgPath, string relativePath)
         {
-            Result result = new Result();
+            RecordResult result = new RecordResult() { Paths = new List<string>() };
 
             string tempImgsPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", relativeTempImgPath);
             string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", relativePath, gameId.ToString());
@@ -49,7 +49,9 @@ namespace UsedGamesSale.Services.Image
             string[] imgs = Directory.GetFiles(tempImgsPath);
             foreach (string img in imgs)
             {
-                File.Copy(img, $"{path}/{Path.GetFileName(img)}");
+                string fileName = Path.GetFileName(img);
+                File.Copy(img, $"{path}/{fileName}");
+                result.Paths.Add($"/{relativePath}/{gameId}/{fileName}");
             }
 
             result.Success = true;

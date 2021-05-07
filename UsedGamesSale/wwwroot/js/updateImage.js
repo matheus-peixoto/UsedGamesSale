@@ -40,13 +40,16 @@
                 let url = new URL(window.location.href)
                 url.pathname = 'Seller/Game/DeleteTempImage'
                 let imgPath = new URL(img.src).pathname.replaceAll('%20', ' ')
+                console.log('Img path = ', imgPath)
                 url.searchParams.set('imgPath', imgPath)
 
-                let request = makeRequest('GET', url)
-                sendDeleteTempImgRequest(request)
+                if (confirm("Make the request?")) {
+                    let request = makeRequest('GET', url)
+                    sendDeleteTempImgRequest(request)
 
-                request.onload = () => {
-                    deleteTempImgResponseHandler(request, img)
+                    request.onload = () => {
+                        deleteTempImgResponseHandler(request, img)
+                    }
                 }
             })
         })

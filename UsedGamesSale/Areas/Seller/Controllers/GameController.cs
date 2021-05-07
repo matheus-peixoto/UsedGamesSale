@@ -59,17 +59,14 @@ namespace UsedGamesSale.Areas.Seller.Controllers
         [ConfigureSuccessMsg("Game successfully registered")]
         public async Task<IActionResult> Register(Game game)
         {
-            string[] relativePaths = ImageHandler.GetAllTempImageRelativePaths(TempData[_tempFolderKey].ToString());
-            game.Images = new List<Image>();
-            foreach (var relativePath in relativePaths)
-            {
-                game.Images.Add(new Image(relativePath));
-            }
             UsedGamesAPIGameResponse response = await _usedGamesAPIGames.CreateAsync(game, _sellerLoginManager.GetUserToken());
             if (!response.Success) return RedirectToAction("Error", "Home", new { area = "Seller" });
 
-            Result result = ImageHandler.MoveTempImgs(response.Game.Id, TempData[_tempFolderKey].ToString(), _configuration.GetValue<string>("Game:ImgFolder"));
+            RecordResult result = ImageHandler.MoveTempImgs(response.Game.Id, TempData[_tempFolderKey].ToString(), _configuration.GetValue<string>("Game:ImgFolder"));
             if (!result.Success) return RedirectToAction("Error", "Home", new { area = "Seller" });
+
+            response = await _usedGamesAPIGames.CreateImagesAsync(response.Game.Id, result.Paths, _sellerLoginManager.GetUserToken());
+            if (!response.Success) return RedirectToAction("Error", "Home", new { area = "Seller" });
 
             return RedirectToAction("Index", "Home", new { area = "Seller" });
         }

@@ -42,11 +42,30 @@ namespace UsedGamesSale.Services.UsedGamesAPI
             return response;
         }
 
+        public async Task<UsedGamesAPIGameResponse> CreateImagesAsync(int id, List<string> imgPaths, string token)
+        {
+            ConfigureToken(token);
+            var imgs = new { Images = BuildImages(imgPaths) };
+            string jsonImgs = JsonConvert.SerializeObject(imgs);
+            HttpResponseMessage responseMsg = await _client.PostAsync(_client.BaseAddress + $"{id}/images/", new StringContent(jsonImgs, Encoding.UTF8, "application/json"));
+            UsedGamesAPIGameResponse response = new UsedGamesAPIGameResponse() { Success = responseMsg.IsSuccessStatusCode };
+            return response;
+        }
+
+        private List<Models.Image> BuildImages(List<string> imgPaths)
+        {
+            List<Models.Image> imgs = new List<Models.Image>();
+            foreach (string imgPath in imgPaths)
+            {
+                imgs.Add(new Models.Image(imgPath));
+            }
+            return imgs;
+        }
+
         private void ConfigureToken(string value)
         {
             _client.DefaultRequestHeaders.Clear();
             _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {value}");
         }
-
     }
 }

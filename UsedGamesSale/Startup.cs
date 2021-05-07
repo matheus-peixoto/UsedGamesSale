@@ -24,7 +24,7 @@ namespace UsedGamesSale
         {
             services.Configure<CookieTempDataProviderOptions>(options => options.Cookie.IsEssential = true);
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddSession(options =>
             {
                 options.Cookie.IsEssential = true;
