@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using UsedGamesSale.Models;
 using UsedGamesSale.Models.ViewModels;
+using UsedGamesSale.Services.Controllers;
 using UsedGamesSale.Services.Filters;
 using UsedGamesSale.Services.Filters.Game;
 using UsedGamesSale.Services.Filters.Seller;
@@ -25,36 +26,32 @@ namespace UsedGamesSale.Areas.Seller.Controllers
     {
         private readonly UsedGamesAPIGames _usedGamesAPIGames;
         private readonly UsedGamesAPIPlatforms _usedGamesAPIPlatforms;
-        private readonly int _imgsPerGame;
-        private readonly IConfiguration _configuration;
         private SellerLoginManager _sellerLoginManager;
-        private const string _tempFolderKey = "ImgTempFolder";
+        private GameControllerServices _controllerServices;
 
-        public GameController(UsedGamesAPIGames usedGamesAPIGames, UsedGamesAPIPlatforms usedGamesAPIPlatforms, IConfiguration configuration, SellerLoginManager sellerLoginManager)
+        public GameController(UsedGamesAPIGames usedGamesAPIGames, UsedGamesAPIPlatforms usedGamesAPIPlatforms, SellerLoginManager sellerLoginManager, GameControllerServices services)
         {
             _usedGamesAPIPlatforms = usedGamesAPIPlatforms;
             _usedGamesAPIGames = usedGamesAPIGames;
-            _configuration = configuration;
-            _imgsPerGame = configuration.GetValue<int>("Game:ImgsPerGame");
+            _controllerServices = services;
             _sellerLoginManager = sellerLoginManager;
         }
 
         [HttpGet]
         public async Task<IActionResult> Register()
         {
-            if (TempData.ContainsKey(_tempFolderKey))
-                ImageHandler.DeleteImgFolder(TempData[_tempFolderKey].ToString());
+            ImageHandler.DeleteImgFolder(_controllerServices.GetImgsTempFolder());
 
             UsedGamesAPIPlatformResponse response = await _usedGamesAPIPlatforms.GetPlatformsAsync();
             GameViewModel viewModel = new GameViewModel
             (
-                platforms: new SelectList(response.Platforms, "Id", "Name"), imgsPerGame: _imgsPerGame, sellerId: _sellerLoginManager.GetUserId()
+                platforms: new SelectList(response.Platforms, "Id", "Name"), imgsPerGame: _controllerServices.GetImgsPerGame(), sellerId: _sellerLoginManager.GetUserId()
             );
             return View(viewModel);
         }
 
         [HttpPost]
-        [ValidateGameOnRegister(_tempFolderKey)]
+        [ValidateGameOnRegister]
         [AddGamePostDate]
         [ConfigureSuccessMsg("Game successfully registered")]
         public async Task<IActionResult> Register(Game game)
@@ -62,11 +59,13 @@ namespace UsedGamesSale.Areas.Seller.Controllers
             UsedGamesAPIGameResponse response = await _usedGamesAPIGames.CreateAsync(game, _sellerLoginManager.GetUserToken());
             if (!response.Success) return RedirectToAction("Error", "Home", new { area = "Seller" });
 
-            RecordResult result = ImageHandler.MoveTempImgs(response.Game.Id, TempData[_tempFolderKey].ToString(), _configuration.GetValue<string>("Game:ImgFolder"));
+            RecordResult result = ImageHandler.MoveTempImgs(response.Game.Id, _controllerServices.GetImgsTempFolder(), _controllerServices.GetImgsFolder());
             if (!result.Success) return RedirectToAction("Error", "Home", new { area = "Seller" });
 
             response = await _usedGamesAPIGames.CreateImagesAsync(response.Game.Id, result.Paths, _sellerLoginManager.GetUserToken());
             if (!response.Success) return RedirectToAction("Error", "Home", new { area = "Seller" });
+
+            ImageHandler.DeleteImgFolder(_controllerServices.GetImgsTempFolder());
 
             return RedirectToAction("Index", "Home", new { area = "Seller" });
         }
@@ -74,15 +73,7 @@ namespace UsedGamesSale.Areas.Seller.Controllers
         [HttpPost]
         public IActionResult UploadTempImage([FromForm] IFormFile img)
         {
-            string relativeTempPath;
-            if (!TempData.ContainsKey("imgTempFolder"))
-            {
-                relativeTempPath = $"{_configuration.GetValue<string>("Game:ImgTempFolder")}/{_sellerLoginManager.GetUserId()}";
-                TempData["imgTempFolder"] = relativeTempPath;
-            }
-
-            relativeTempPath = TempData.Peek("imgTempFolder").ToString();
-            RecordResult recordResult = ImageHandler.Record(relativeTempPath, img);
+            RecordResult recordResult = ImageHandler.Record(_controllerServices.GetImgsTempFolder(), img);
             if (!recordResult.Success) return BadRequest(new { errorMsg = recordResult.ErrorMessage });
 
             return Ok(new { imgPath = recordResult.Path });

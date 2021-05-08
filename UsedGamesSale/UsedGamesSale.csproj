@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\img\game\temp\" />
+    <Folder Include="wwwroot\img\game\temp\3\" />
   </ItemGroup>
 
 </Project>

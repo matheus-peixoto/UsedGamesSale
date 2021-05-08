@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using UsedGamesSale.Services.Controllers;
 using UsedGamesSale.Services.Login;
 using UsedGamesSale.Services.UsedGamesAPI;
 
@@ -41,6 +42,7 @@ namespace UsedGamesSale
             services.AddScoped<UsedGamesAPIGames>();
             services.AddScoped<ClientLoginManager>();
             services.AddScoped<SellerLoginManager>();
+            services.AddScoped<GameControllerServices>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
