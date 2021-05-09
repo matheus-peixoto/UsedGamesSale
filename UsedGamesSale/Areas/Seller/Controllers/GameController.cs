@@ -1,11 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using UsedGamesSale.Models;
 using UsedGamesSale.Models.ViewModels;
@@ -70,6 +65,14 @@ namespace UsedGamesSale.Areas.Seller.Controllers
             return RedirectToAction("Index", "Home", new { area = "Seller" });
         }
 
+        [HttpPost]
+        public IActionResult UploadTempImage([FromForm] IFormFile img)
+        {
+            RecordResult recordResult = ImageHandler.Record(_controllerServices.GetImgsTempFolder(), img);
+            if (!recordResult.Success) return BadRequest(new { errorMsg = recordResult.ErrorMessage });
+            return Ok(new { imgPath = recordResult.Path });
+        }
+
         [HttpGet]
         public async Task<IActionResult> Edit([FromRoute] int id)
         {
@@ -99,14 +102,6 @@ namespace UsedGamesSale.Areas.Seller.Controllers
         }
 
         [HttpPost]
-        public IActionResult UploadTempImage([FromForm] IFormFile img)
-        {
-            RecordResult recordResult = ImageHandler.Record(_controllerServices.GetImgsTempFolder(), img);
-            if (!recordResult.Success) return BadRequest(new { errorMsg = recordResult.ErrorMessage });
-            return Ok(new { imgPath = recordResult.Path });
-        }
-
-        [HttpPost]
         public async Task<IActionResult> ChangeImage([FromForm] GameViewModel viewModel)
         {
             UsedGamesAPIGameResponse response = await _usedGamesAPIGames.GetImagesAsync(viewModel.GameId, _sellerLoginManager.GetUserToken());
@@ -122,6 +117,15 @@ namespace UsedGamesSale.Areas.Seller.Controllers
             if (!response.Success) return RedirectToAction("Error", "Home", new { area = "Seller" });
 
             return Ok(new { imgPath = recordResult.Path });
+        }
+
+        [HttpGet]
+        [ConfigureSuccessMsg("Game successfully deleted")]
+        public async Task<IActionResult> Delete([FromRoute] int id)
+        {
+            UsedGamesAPIGameResponse response = await _usedGamesAPIGames.DeleteAsync(id, _sellerLoginManager.GetUserToken());
+            if (!response.Success) return RedirectToAction("Error", "Home", new { area = "Seller" });
+            return RedirectToAction("Index", "Home", new { area = "Seller" });
         }
 
         [HttpGet]

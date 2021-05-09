@@ -5,6 +5,24 @@
     Game gm = new Game();
 }
 
+<div id="overlay" class="overlay display-none">
+    <div class="card overlay-card">
+        <div class="overlay-card-head">
+            <h4 class="card-title">Are you sure you want to delete this?</h4>
+        </div>
+        <div class="overlay-card-body">
+            <p class="mg-bottom-25px">Spider Man Miles Morales</p>
+        </div>
+        <div class="overlay-card-footer">
+            <div>
+                <button id="deleteBtn" type="submit" class="btn btn-danger2 btn-block btn-left">Delete</button>
+            </div><div>
+                <button id="cancelBtn" type="button" class="btn btn-grey btn-block btn-right">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <section class="categories">
     <aside>
         <nav>
@@ -53,7 +71,7 @@
                             <td data-th="@Html.DisplayNameFor(g => game.StockQuantity): &nbsp;">@Html.DisplayFor(p => game.StockQuantity)</td>
                             <td data-th="Options: &nbsp;">
                                 <a class="btn btn-" asp-controller="Game" asp-action="Edit" asp-route-id="@game.Id">Edit</a>
-                                <a class="btn btn-" asp-controller="Game" asp-action="Delete" asp-route-id="@game.Id">Delete</a>
+                                <a class="btn deleteLink" asp-controller="Game" asp-action="Delete" asp-route-id="@game.Id">Delete</a>
                             </td>
                         </tr>
                     }
@@ -67,3 +85,5 @@
     }
 
 </section>
+
+<script src="~/js/deletePopUp.js"></script>

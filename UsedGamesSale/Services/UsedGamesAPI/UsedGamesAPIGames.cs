@@ -84,6 +84,15 @@ namespace UsedGamesSale.Services.UsedGamesAPI
             return response;
         }
 
+        public async Task<UsedGamesAPIGameResponse> DeleteAsync(int id, string token)
+        {
+            ConfigureToken(token);
+            HttpResponseMessage responseMsg = await _client.DeleteAsync(_client.BaseAddress + id.ToString());
+            string responseStr = await responseMsg.Content.ReadAsStringAsync();
+            UsedGamesAPIGameResponse response = new UsedGamesAPIGameResponse(responseMsg.IsSuccessStatusCode);
+            return response;
+        }
+
         private List<Image> BuildImages(List<string> imgPaths)
         {
             List<Image> imgs = new List<Image>();
