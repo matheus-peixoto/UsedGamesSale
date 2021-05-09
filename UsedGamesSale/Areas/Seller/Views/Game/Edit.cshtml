@@ -57,6 +57,19 @@
                 <textarea asp-for="Game.Details"></textarea>
                 <div class="msg-error-sm"><span asp-validation-for="Game.Details"></span></div>
             </div>
+            <div class="form-control-submit">
+                <button type="submit" class="btn btn-primary btn-lg">Edit</button>
+                <a href="#">Back</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="card mg-top-25px">
+        <div method="post" class="form">
+            <div class="form-title">
+                <h2 class="title-color">Edit Game Images</h2>
+            </div>
+
             @for (int i = 0; i < Model.ImgsPerGame; i++)
             {
                 <div class="form-control image">
@@ -67,12 +80,7 @@
                     </div>
                 </div>
             }
-
-            <div class="form-control-submit">
-                <button type="submit" class="btn btn-primary btn-lg">Edit</button>
-                <a href="#">Back</a>
-            </div>
-        </form>
+        </div>
     </div>
 </section>
 

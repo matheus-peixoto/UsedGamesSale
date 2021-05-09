@@ -90,9 +90,12 @@ namespace UsedGamesSale.Areas.Seller.Controllers
         }
 
         [HttpPost]
+        [ConfigureSuccessMsg("Game successfully edited")]
         public async Task<IActionResult> Edit([FromForm] Game game)
         {
-            return BadRequest();
+            UsedGamesAPIGameResponse response = await _usedGamesAPIGames.UpdateAsync(game, _sellerLoginManager.GetUserToken());
+            if (!response.Success) return RedirectToAction("Error", "Home", new { area = "Seller" });
+            return RedirectToAction("Index", "Home", new { area = "Seller" });
         }
 
         [HttpPost]

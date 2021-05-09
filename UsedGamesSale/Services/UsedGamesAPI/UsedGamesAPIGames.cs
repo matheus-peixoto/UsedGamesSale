@@ -64,7 +64,16 @@ namespace UsedGamesSale.Services.UsedGamesAPI
             UsedGamesAPIGameResponse response = new UsedGamesAPIGameResponse(success: responseMsg.IsSuccessStatusCode);
             return response;
         }
-        
+
+        public async Task<UsedGamesAPIGameResponse> UpdateAsync(Game game, string token)
+        {
+            ConfigureToken(token);
+            string jsonGame = JsonConvert.SerializeObject(game);
+            HttpResponseMessage responseMsg = await _client.PutAsync($"{_client.BaseAddress}{game.Id}", new StringContent(jsonGame, Encoding.UTF8, "application/json"));
+            UsedGamesAPIGameResponse response = new UsedGamesAPIGameResponse(responseMsg.IsSuccessStatusCode);
+            return response;
+        }
+
         public async Task<UsedGamesAPIGameResponse> UpdateImageAsync(Image img, string token)
         {
             ConfigureToken(token);
