@@ -1,12 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using UsedGamesSale.Models;
 
-namespace UsedGamesSale.Services.Image
+namespace UsedGamesSale.Services.ImageFilter
 {
     public class ImageHandler
     {
@@ -22,13 +18,22 @@ namespace UsedGamesSale.Services.Image
             return files;
         }
 
-        public static RecordResult Record(string relativePath, IFormFile file)
+        public static RecordResult Record(string relativePath, IFormFile img)
         {
             string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", relativePath);
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
 
-            return PassImgToComputer(file, path, relativePath);
+            return PassImgToComputer(img, path, relativePath);
+        }
+
+        public static RecordResult Change(string relativeFolder, string oldRelativePath, IFormFile img)
+        {
+            Result result = Delete(oldRelativePath);
+            RecordResult recordResult = new RecordResult() { Success = result.Success };
+            if (!result.Success) return recordResult;
+            recordResult = Record($"{relativeFolder}", img);
+            return recordResult;
         }
 
         public static RecordResult MoveTempImgs(int gameId, string relativeTempImgPath, string relativePath)

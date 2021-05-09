@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using System;
 using System.Threading.Tasks;
 using UsedGamesSale.Models.ViewModels;
-using UsedGamesSale.Services.Image;
+using UsedGamesSale.Services.ImageFilter;
 using UsedGamesSale.Services.UsedGamesAPI.Responses;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using UsedGamesSale.Services.UsedGamesAPI;

@@ -1,4 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
+using System.Collections.Generic;
+using System.Linq;
+using UsedGamesSale.Models;
 using UsedGamesSale.Services.Login;
 
 namespace UsedGamesSale.Services.Controllers
@@ -19,5 +22,11 @@ namespace UsedGamesSale.Services.Controllers
         public string GetImgsFolder() => $"{_configuration.GetValue<string>("Game:ImgsFolder")}";
 
         public int GetImgsPerGame() => _configuration.GetValue<int>("Game:ImgsPerGame");
+
+        public bool IsNewImg(List<Image> imgs, string newImgName)
+        {
+            // If any image name is equal to the new image name, then it's not new 
+            return !imgs.Any(i => i.Path.Split('/').Last() == newImgName);
+        }
     }
 }

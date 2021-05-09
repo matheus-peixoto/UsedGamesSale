@@ -1,5 +1,9 @@
 ﻿@model GameViewModel
 
+@{
+    ViewData["title"] = "Edit Game";
+}
+
 <section class="categories">
     <aside>
         <nav>
@@ -16,7 +20,7 @@
     <div class="card">
         <form method="post" class="form">
             <div class="form-title">
-                <h2 class="title-color">Register Game</h2>
+                <h2 class="title-color">Edit Game</h2>
             </div>
 
             @if (ViewData.ContainsKey("MSG_E"))
@@ -26,7 +30,8 @@
                 </div>
             }
 
-            <input type="hidden" asp-for="Game.SellerId" value="@Model.SellerId" />
+            <input id="gameId" type="hidden" asp-for="Game.Id" value="@Model.Game.Id" />
+            <input type="hidden" asp-for="Game.SellerId" value="@Model.Game.SellerId" />
             <div class="form-control name">
                 <label asp-for="Game.Name" for="name"></label>
                 <input asp-for="Game.Name" placeholder="">
@@ -54,36 +59,21 @@
             </div>
             @for (int i = 0; i < Model.ImgsPerGame; i++)
             {
-                if (Model.TempImgsPaths is null ? false : Model.TempImgsPaths.Length > i)
-                {
-                    <div class="form-control image">
-                        <label class="display-none">Select an image</label>
-                        <input class="display-none" type="file" accept="image/*" />
-                        <div class="img-container">
-                            <img src="@Model.TempImgsPaths[i]" />
-                            <button class="btn-danger cursor-pointer" type="button">X</button>
-                        </div>
+                <div class="form-control image">
+                    <label>Click on the image to select a new one</label>
+                    <input class="display-none" type="file" accept="image/*" />
+                    <div class="img-container">
+                        <img data-img-id="@Model.Game.Images[i].Id" src="@Model.Game.Images[i].Path" />
                     </div>
-                }
-                else
-                {
-                    <div class="form-control image">
-                        <label>Select an image</label>
-                        <input class="display-none" type="file" accept="image/*" />
-                        <div class="img-container">
-                            <img src="~/img/default-img.png" />
-                            <button class="display-none btn-danger cursor-pointer" type="button">X</button>
-                        </div>
-                    </div>
-                }
+                </div>
             }
 
             <div class="form-control-submit">
-                <button type="submit" class="btn btn-primary btn-lg">Register</button>
+                <button type="submit" class="btn btn-primary btn-lg">Edit</button>
                 <a href="#">Back</a>
             </div>
         </form>
     </div>
 </section>
 
-<script src="~/js/gameRegisterImage.js"></script>
+<script src="~/js/gameEditImage.js"></script>

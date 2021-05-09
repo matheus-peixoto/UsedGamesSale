@@ -39,7 +39,7 @@
 
                 let url = new URL(window.location.href)
                 url.pathname = 'Seller/Game/DeleteTempImage'
-                let imgPath = new URL(img.src).pathname.replaceAll('%20', ' ')
+                let imgPath = getImgPath(img)
                 console.log('Img path = ', imgPath)
                 url.searchParams.set('imgPath', imgPath)
 
@@ -53,6 +53,10 @@
                 }
             })
         })
+    }
+
+    function getImgPath(img) {
+        return new URL(img.src).pathname.replaceAll('%20', ' ')
     }
 
     function makeRequest(method, url) {

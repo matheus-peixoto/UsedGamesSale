@@ -1,8 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace UsedGamesSale.Models.ViewModels
 {
@@ -13,6 +10,11 @@ namespace UsedGamesSale.Models.ViewModels
         public int ImgsPerGame { get; set; }
         public string[] TempImgsPaths { get; set; }
         public int SellerId { get; set; }
+        public int GameId { get; set; }
+        public int ImgId { get; set; }
+
+        public IFormFile ImgFile { get; set; }
+        public string OldImgRelativePath { get; set; }
 
         public GameViewModel() { }
 

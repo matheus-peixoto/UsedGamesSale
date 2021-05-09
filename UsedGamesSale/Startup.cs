@@ -8,6 +8,7 @@ using System;
 using UsedGamesSale.Services.Controllers;
 using UsedGamesSale.Services.Login;
 using UsedGamesSale.Services.UsedGamesAPI;
+using UsedGamesSale.Services.UsedGamesAPI.Interfaces;
 
 namespace UsedGamesSale
 {

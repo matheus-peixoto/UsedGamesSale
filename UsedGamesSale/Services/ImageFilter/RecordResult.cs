@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace UsedGamesSale.Services.Image
+namespace UsedGamesSale.Services.ImageFilter
 {
     public class RecordResult : Result
     {

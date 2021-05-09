@@ -30,6 +30,19 @@ namespace UsedGamesSale.Services.UsedGamesAPI
             return response;
         }
 
+        public async Task<UsedGamesAPIGameResponse> GetImagesAsync(int id, string token)
+        {
+            ConfigureToken(token);
+            HttpResponseMessage responseMsg = await _client.GetAsync($"{_client.BaseAddress}{id}/images");
+            string responseStr = await responseMsg.Content.ReadAsStringAsync();
+            UsedGamesAPIGameResponse response = new UsedGamesAPIGameResponse(responseMsg.IsSuccessStatusCode);
+            if (response.Success) 
+            { 
+                response.Images = JsonConvert.DeserializeObject<List<Image>>(responseStr); 
+            }
+            return response;
+        }
+
         public async Task<UsedGamesAPIGameResponse> CreateAsync(Game game, string token)
         {
             ConfigureToken(token);
@@ -48,16 +61,26 @@ namespace UsedGamesSale.Services.UsedGamesAPI
             var imgs = new { Images = BuildImages(imgPaths) };
             string jsonImgs = JsonConvert.SerializeObject(imgs);
             HttpResponseMessage responseMsg = await _client.PostAsync(_client.BaseAddress + $"{id}/images/", new StringContent(jsonImgs, Encoding.UTF8, "application/json"));
-            UsedGamesAPIGameResponse response = new UsedGamesAPIGameResponse() { Success = responseMsg.IsSuccessStatusCode };
+            UsedGamesAPIGameResponse response = new UsedGamesAPIGameResponse(success: responseMsg.IsSuccessStatusCode);
+            return response;
+        }
+        
+        public async Task<UsedGamesAPIGameResponse> UpdateImageAsync(Image img, string token)
+        {
+            ConfigureToken(token);
+            string requestUri = $"{_client.BaseAddress}{img.GameId}/images/{img.Id}";
+            string jsonImg = JsonConvert.SerializeObject(img);
+            HttpResponseMessage responseMsg = await _client.PutAsync(requestUri, new StringContent(jsonImg, Encoding.UTF8, "application/json"));
+            UsedGamesAPIGameResponse response = new UsedGamesAPIGameResponse(success: responseMsg.IsSuccessStatusCode);
             return response;
         }
 
-        private List<Models.Image> BuildImages(List<string> imgPaths)
+        private List<Image> BuildImages(List<string> imgPaths)
         {
-            List<Models.Image> imgs = new List<Models.Image>();
+            List<Image> imgs = new List<Image>();
             foreach (string imgPath in imgPaths)
             {
-                imgs.Add(new Models.Image(imgPath));
+                imgs.Add(new Image(imgPath));
             }
             return imgs;
         }
