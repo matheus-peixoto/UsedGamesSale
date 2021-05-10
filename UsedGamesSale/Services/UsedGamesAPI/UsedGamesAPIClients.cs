@@ -4,6 +4,6 @@ namespace UsedGamesSale.Services.UsedGamesAPI
 {
     public class UsedGamesAPIClients : UsedGamesAPILogin
     {
-        public UsedGamesAPIClients(IHttpClientFactory clientFactory) : base(clientFactory, "clients/") { }
+        public UsedGamesAPIClients(IHttpClientFactory clientFactory) : base(clientFactory, "clients") { }
     }
 }

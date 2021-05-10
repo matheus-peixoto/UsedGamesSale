@@ -1,4 +1,4 @@
-﻿namespace UsedGamesSale.Services.ImageFilter
+﻿namespace UsedGamesSale.Services
 {
     public class Result
     {

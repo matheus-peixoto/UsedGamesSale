@@ -23,8 +23,10 @@ namespace UsedGamesSale.Services.UsedGamesAPI
         {
             string jsonUser = JsonConvert.SerializeObject(userDTO);
             HttpResponseMessage responseMsg = await _client.PostAsync(_client.BaseAddress + "login", new StringContent(jsonUser, Encoding.UTF8, "application/json"));
+            UsedGamesAPILoginResponse response = new UsedGamesAPILoginResponse(responseMsg.IsSuccessStatusCode);
+            if (!response.Success) return response;
             string responseStr = await responseMsg.Content.ReadAsStringAsync();
-            UsedGamesAPILoginResponse response = JsonConvert.DeserializeObject<UsedGamesAPILoginResponse>(responseStr);
+            response = JsonConvert.DeserializeObject<UsedGamesAPILoginResponse>(responseStr);
             response.Success = responseMsg.IsSuccessStatusCode;
             return response;
         }

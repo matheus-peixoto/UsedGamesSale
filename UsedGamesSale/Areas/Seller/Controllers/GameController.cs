@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Threading.Tasks;
 using UsedGamesSale.Models;
+using UsedGamesSale.Models.DTOs.GameDTOs;
 using UsedGamesSale.Models.ViewModels;
+using UsedGamesSale.Services;
 using UsedGamesSale.Services.Controllers;
 using UsedGamesSale.Services.Filters;
 using UsedGamesSale.Services.Filters.Game;
@@ -51,16 +53,8 @@ namespace UsedGamesSale.Areas.Seller.Controllers
         [ConfigureSuccessMsg("Game successfully registered")]
         public async Task<IActionResult> Register([FromForm] Game game)
         {
-            UsedGamesAPIGameResponse response = await _usedGamesAPIGames.CreateAsync(game, _sellerLoginManager.GetUserToken());
-            if (!response.Success) return RedirectToAction("Error", "Home", new { area = "Seller" });
-
-            RecordResult result = ImageHandler.MoveTempImgs(response.Game.Id, _controllerServices.GetImgsTempFolder(), _controllerServices.GetImgsFolder());
+            Result result = await _controllerServices.RegisterGameAsync(game);
             if (!result.Success) return RedirectToAction("Error", "Home", new { area = "Seller" });
-
-            response = await _usedGamesAPIGames.CreateImagesAsync(response.Game.Id, result.Paths, _sellerLoginManager.GetUserToken());
-            if (!response.Success) return RedirectToAction("Error", "Home", new { area = "Seller" });
-
-            ImageHandler.DeleteImgFolder(_controllerServices.GetImgsTempFolder());
 
             return RedirectToAction("Index", "Home", new { area = "Seller" });
         }
@@ -70,6 +64,7 @@ namespace UsedGamesSale.Areas.Seller.Controllers
         {
             RecordResult recordResult = ImageHandler.Record(_controllerServices.GetImgsTempFolder(), img);
             if (!recordResult.Success) return BadRequest(new { errorMsg = recordResult.ErrorMessage });
+
             return Ok(new { imgPath = recordResult.Path });
         }
 
@@ -102,17 +97,17 @@ namespace UsedGamesSale.Areas.Seller.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ChangeImage([FromForm] GameViewModel viewModel)
+        public async Task<IActionResult> ChangeImage([FromForm] ChangeImagedDto gameDto)
         {
-            UsedGamesAPIGameResponse response = await _usedGamesAPIGames.GetImagesAsync(viewModel.GameId, _sellerLoginManager.GetUserToken());
+            UsedGamesAPIGameResponse response = await _usedGamesAPIGames.GetImagesAsync(gameDto.GameId, _sellerLoginManager.GetUserToken());
             if (!response.Success) return BadRequest();
 
-            if (!_controllerServices.IsNewImg(response.Images, viewModel.ImgFile.FileName)) return BadRequest(new { ErrorMessage = "This is not a new image" });
+            if (!_controllerServices.IsNewImg(response.Images, gameDto.ImgFile.FileName)) return BadRequest(new { ErrorMessage = "This is not a new image" });
 
-            RecordResult recordResult = ImageHandler.Change($"{_controllerServices.GetImgsFolder()}/{viewModel.GameId}", viewModel.OldImgRelativePath, viewModel.ImgFile);
+            RecordResult recordResult = ImageHandler.Change($"{_controllerServices.GetImgsFolder()}/{gameDto.GameId}", gameDto.OldImgRelativePath, gameDto.ImgFile);
             if (!recordResult.Success) return BadRequest(new { errorMsg = recordResult.ErrorMessage });
 
-            Image img = new Image(viewModel.ImgId, recordResult.Path, viewModel.GameId);
+            Image img = new Image(gameDto.ImgId, recordResult.Path, gameDto.GameId);
             response = await _usedGamesAPIGames.UpdateImageAsync(img, _sellerLoginManager.GetUserToken());
             if (!response.Success) return RedirectToAction("Error", "Home", new { area = "Seller" });
 

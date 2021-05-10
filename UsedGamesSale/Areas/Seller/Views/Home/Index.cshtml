@@ -6,19 +6,20 @@
 }
 
 <div id="overlay" class="overlay display-none">
-    <div class="card overlay-card">
-        <div class="overlay-card-head">
-            <h4 class="card-title">Are you sure you want to delete this?</h4>
-        </div>
-        <div class="overlay-card-body">
-            <p class="mg-bottom-25px">Spider Man Miles Morales</p>
-        </div>
-        <div class="overlay-card-footer">
-            <div>
-                <button id="deleteBtn" type="submit" class="btn btn-danger2 btn-block btn-left">Delete</button>
-            </div><div>
-                <button id="cancelBtn" type="button" class="btn btn-grey btn-block btn-right">Cancel</button>
-            </div>
+</div>
+
+<div id="overlay-card" class="card overlay-card display-none">
+    <div class="overlay-card-head">
+        <h4 class="card-title">Are you sure you want to delete this game?</h4>
+    </div>
+    <div class="overlay-card-body">
+        <p id="info" class="mg-bottom-25px"></p>
+    </div>
+    <div class="overlay-card-footer">
+        <div>
+            <button id="deleteBtn" type="button" class="btn btn-danger btn-block btn-left">Delete</button>
+        </div><div>
+            <button id="cancelBtn" type="button" class="btn btn-grey btn-block btn-right">Cancel</button>
         </div>
     </div>
 </div>
@@ -65,7 +66,7 @@
                     {
                         <tr>
                             <td data-th="@Html.DisplayNameFor(g => game.Id): &nbsp;">@Html.DisplayFor(p => game.Id)</td>
-                            <td data-th="@Html.DisplayNameFor(g => game.Platform): &nbsp;">@Html.DisplayFor(p => game.Name)</td>
+                            <td class="game-name" data-th="@Html.DisplayNameFor(g => game.Platform): &nbsp;">@Html.DisplayFor(p => game.Name)</td>
                             <td data-th="@Html.DisplayNameFor(g => game.Platform): &nbsp;">@Html.DisplayFor(p => game.Platform.Name)</td>
                             <td data-th="@Html.DisplayNameFor(g => game.Price): &nbsp;">@Html.DisplayFor(p => game.Price)</td>
                             <td data-th="@Html.DisplayNameFor(g => game.StockQuantity): &nbsp;">@Html.DisplayFor(p => game.StockQuantity)</td>

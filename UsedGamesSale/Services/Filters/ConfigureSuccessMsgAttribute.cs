@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace UsedGamesSale.Services.Filters
 {
@@ -20,7 +17,6 @@ namespace UsedGamesSale.Services.Filters
 
         public void OnActionExecuted(ActionExecutedContext context)
         {
-            //context.
             if (!context.Canceled && context.HttpContext.Response.StatusCode == 200 && !(context.Result is null))
             {
                 Controller controller = (Controller)context.Controller;

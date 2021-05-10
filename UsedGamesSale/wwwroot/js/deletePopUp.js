@@ -1,29 +1,44 @@
 ﻿document.addEventListener('DOMContentLoaded', () => {
     let overlay = document.getElementById('overlay')
+    let overlayCard = document.getElementById('overlay-card')
     let deleteBtn = document.getElementById('deleteBtn')
     let cancelBtn = document.getElementById('cancelBtn')
     let deleteLinks = document.querySelectorAll('.deleteLink')
+    let info = document.getElementById('info')
     let redirectLocation = ''
 
     deleteLinks.forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault()
             redirectLocation = e.target.href
-            console.log(redirectLocation)
-            toggleOverlay()
+            appearPopUp()
+            let gameNameEl = e.target.parentElement.parentElement.querySelector('.game-name')
+            info.innerText = gameNameEl.innerText
         })
     });
 
-    cancelBtn.addEventListener('click', toggleOverlay)
+    cancelBtn.addEventListener('click', deseappearPopUp)
 
-    deleteBtn.addEventListener('click', (e) => {
-        toggleOverlay()
+    deleteBtn.addEventListener('click', () => {
+        deseappearPopUp()
         window.location.href = redirectLocation
-
     })
 
-    function toggleOverlay() {
-        overlay.classList.toggle('display-none')
+    overlay.addEventListener('click', deseappearOverlay)
+
+    function appearPopUp() {
+        overlayCard.classList.remove('display-none')
+        overlay.classList.remove('display-none')
+    }
+
+    function deseappearPopUp() {
+        overlayCard.classList.add('display-none')
+        overlay.classList.add('display-none')
+    }
+
+    function deseappearOverlay() {
+        overlayCard.classList.add('display-none')
+        overlay.classList.add('display-none')
     }
 })
 

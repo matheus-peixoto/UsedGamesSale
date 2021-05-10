@@ -27,7 +27,7 @@ namespace UsedGamesSale.Services.Filters.Game
             string[] tempImgPaths = ImageHandler.GetAllTempImageRelativePaths(controllerServices.GetImgsTempFolder());
             if (!context.ModelState.IsValid || tempImgPaths.Length < imgsPerGame)
             {
-                if (tempImgPaths.Length < imgsPerGame) controller.ViewData["MSG_E"] = $"You need to have {imgsPerGame} images for the product";
+                if (tempImgPaths.Length < imgsPerGame) controller.ViewData["MSG_E"] = $"You need to have {imgsPerGame} for images a game";
 
                 controller.ViewData["SellerId"] = loginManager.GetUserId();
                 UsedGamesAPIPlatformResponse response = await GetPlatformsAsync(context);

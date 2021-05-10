@@ -130,27 +130,30 @@
     height: 100%;
     min-height: 100vh;
     padding: 20px;
-    display: flex;
-    justify-content: center;
-    z-index: 1000;
+    z-index: 200;
     position: fixed;
     top: 0;
     background-color: rgba(0, 0, 0, 0.30);
 }
 
 .overlay-card {
-    margin-top: 250px;
+    border: none;
+    margin: 150px auto 0;
     max-width: 300px;
     background-color: white;
+    z-index: 1000;
     padding: 0;
     border-radius: 6px;
+    position: fixed;
+    left: 50%;
+    transform: translate(-50%, 0);
 }
 
 .overlay-card-head {
     font-size: 16px;
     text-align: center;
     padding: 10px 25px;
-    background-color: var(--red2);
+    background-color: var(--red);
     border-top-right-radius: inherit;
     border-top-left-radius: inherit;
 }
@@ -332,8 +335,8 @@
 }
 
 .btn-grey {
-    background-color: var(--title-color);
-    color: white;
+    background-color: var(--grey-transparent-light);
+    color: black;
 }
 
 .btn-danger {

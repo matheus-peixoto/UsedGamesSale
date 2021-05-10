@@ -1,5 +1,6 @@
 ﻿document.addEventListener('DOMContentLoaded', () => {
     const defaultImagePath = '/img/default-img.png'
+    const loadingGifPath = '/img/loading.gif'
     let imgContainers = document.querySelectorAll('.img-container')
 
     addUploadTempImg()
@@ -43,13 +44,10 @@
                 console.log('Img path = ', imgPath)
                 url.searchParams.set('imgPath', imgPath)
 
-                if (confirm("Make the request?")) {
-                    let request = makeRequest('GET', url)
-                    sendDeleteTempImgRequest(request)
-
-                    request.onload = () => {
-                        deleteTempImgResponseHandler(request, img)
-                    }
+                let request = makeRequest('GET', url)
+                sendDeleteTempImgRequest(request)
+                request.onload = () => {
+                    deleteTempImgResponseHandler(request, img)
                 }
             })
         })
@@ -57,6 +55,15 @@
 
     function getImgPath(img) {
         return new URL(img.src).pathname.replaceAll('%20', ' ')
+    }
+
+    function addLoadingGif(img) {
+        img.src = loadingGifPath
+        console.log(img.src)
+    }
+
+    function addDefaultImg(img) {
+        img.src = defaultImagePath
     }
 
     function makeRequest(method, url) {
@@ -74,7 +81,8 @@
 
     function sendUploadRequest(request, form, input) {
         request.send(form)
-
+        let img = input.parentElement.querySelector('img')
+        addLoadingGif(img)
         request.onload = () => {
             uploadResponseHandler(request, input)
         }
@@ -88,20 +96,26 @@
         }
     }
 
-    function uploadResponseHandler(request, input) {
-        if (request.status == 200) {
-            let imgContainer = input.parentElement.querySelector('.img-container');
+    function foo() {
+        for (let i = 0; i < 1000; i++) {
+        }
+    }
 
+    function uploadResponseHandler(request, input) {
+        let imgContainer = input.parentElement.querySelector('.img-container');
+        let img = imgContainer.querySelector('img')
+        foo()
+        if (request.status == 200) {
             let label = imgContainer.parentElement.querySelector('label')
             label.classList.add('display-none')
 
-            let img = imgContainer.querySelector('img')
             img.src = request.response.imgPath
             img.classList.add('cursor-default')
 
             let btn = imgContainer.querySelector('button')
             btn.classList.remove('display-none')
-        }
+        } else
+            addDefaultImg(img)
 
         console.log(request.response)
     }

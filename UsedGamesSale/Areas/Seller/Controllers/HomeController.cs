@@ -42,8 +42,6 @@ namespace UsedGamesSale.Areas.Seller.Controllers
         [ConfigureSuccessMsg("Successfully logged")]
         public async Task<IActionResult> Login(UserLoginDTO userDTO)
         {
-            if (!ModelState.IsValid) return View(userDTO);
-
             UsedGamesAPILoginResponse response = await _usedGamesAPISellers.LoginAsync(userDTO);
             if (!response.Success)
             {
