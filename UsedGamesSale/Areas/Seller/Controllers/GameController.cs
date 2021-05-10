@@ -22,13 +22,11 @@ namespace UsedGamesSale.Areas.Seller.Controllers
     public class GameController : Controller
     {
         private readonly UsedGamesAPIGames _usedGamesAPIGames;
-        private readonly UsedGamesAPIPlatforms _usedGamesAPIPlatforms;
         private SellerLoginManager _sellerLoginManager;
         private GameControllerServices _controllerServices;
 
-        public GameController(UsedGamesAPIGames usedGamesAPIGames, UsedGamesAPIPlatforms usedGamesAPIPlatforms, SellerLoginManager sellerLoginManager, GameControllerServices services)
+        public GameController(UsedGamesAPIGames usedGamesAPIGames, SellerLoginManager sellerLoginManager, GameControllerServices services)
         {
-            _usedGamesAPIPlatforms = usedGamesAPIPlatforms;
             _usedGamesAPIGames = usedGamesAPIGames;
             _controllerServices = services;
             _sellerLoginManager = sellerLoginManager;
@@ -39,11 +37,9 @@ namespace UsedGamesSale.Areas.Seller.Controllers
         {
             ImageHandler.DeleteImgFolder(_controllerServices.GetImgsTempFolder());
 
-            UsedGamesAPIPlatformResponse response = await _usedGamesAPIPlatforms.GetPlatformsAsync();
-            GameViewModel viewModel = new GameViewModel
-            (
-                platforms: new SelectList(response.Platforms, "Id", "Name"), imgsPerGame: _controllerServices.GetImgsPerGame(), sellerId: _sellerLoginManager.GetUserId()
-            );
+            GameViewModel viewModel = await _controllerServices.GetGameViewModelForRegisterAsync();
+            if (viewModel is null) return RedirectToAction("Error", "Home", new { area = "Seller" });
+
             return View(viewModel);
         }
 
@@ -73,26 +69,20 @@ namespace UsedGamesSale.Areas.Seller.Controllers
         {
             ImageHandler.DeleteImgFolder(_controllerServices.GetImgsTempFolder());
 
-            UsedGamesAPIGameResponse gameResponse = await _usedGamesAPIGames.GetAsync(id, _sellerLoginManager.GetUserToken());
-            if (!gameResponse.Success) return RedirectToAction("Error", "Home", new { area = "Seller" });
+            GameViewModel viewModel = await _controllerServices.GetGameViewModelForEditAsync(id);
+            if (viewModel is null) return RedirectToAction("Error", "Home", new { area = "Seller" });
 
-            UsedGamesAPIPlatformResponse platformResponse = await _usedGamesAPIPlatforms.GetPlatformsAsync();
-            if (!platformResponse.Success) return RedirectToAction("Error", "Home", new { area = "Seller" });
-
-            GameViewModel viewModel = new GameViewModel
-            (
-                game: gameResponse.Game, platforms: new SelectList(platformResponse.Platforms, "Id", "Name"),
-                imgsPerGame: _controllerServices.GetImgsPerGame(), sellerId: _sellerLoginManager.GetUserId()
-            );
             return View(viewModel);
         }
 
         [HttpPost]
+        [ValidateGameOnEdit]
         [ConfigureSuccessMsg("Game successfully edited")]
         public async Task<IActionResult> Edit([FromForm] Game game)
         {
-            UsedGamesAPIGameResponse response = await _usedGamesAPIGames.UpdateAsync(game, _sellerLoginManager.GetUserToken());
-            if (!response.Success) return RedirectToAction("Error", "Home", new { area = "Seller" });
+            Result result = await _controllerServices.EditGameAsync(game);
+            if (!result.Success) return RedirectToAction("Error", "Home", new { area = "Seller" });
+
             return RedirectToAction("Index", "Home", new { area = "Seller" });
         }
 
@@ -118,8 +108,9 @@ namespace UsedGamesSale.Areas.Seller.Controllers
         [ConfigureSuccessMsg("Game successfully deleted")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            UsedGamesAPIGameResponse response = await _usedGamesAPIGames.DeleteAsync(id, _sellerLoginManager.GetUserToken());
-            if (!response.Success) return RedirectToAction("Error", "Home", new { area = "Seller" });
+            Result result = await _controllerServices.DeleteGameAsync(id);
+            if (!result.Success) return RedirectToAction("Error", "Home", new { area = "Seller" });
+
             return RedirectToAction("Index", "Home", new { area = "Seller" });
         }
 

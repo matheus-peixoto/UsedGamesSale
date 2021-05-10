@@ -34,7 +34,6 @@ document.addEventListener('DOMContentLoaded', () => {
         let id = 0
         let strId = img.getAttribute('data-img-id')
         if (!isNaN(strId)) id = Number.parseInt(strId)
-        alert(`Id = ${id} ID`)
         return id
     }
 

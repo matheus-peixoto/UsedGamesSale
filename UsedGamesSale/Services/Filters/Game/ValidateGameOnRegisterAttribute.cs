@@ -34,7 +34,7 @@ namespace UsedGamesSale.Services.Filters.Game
                 if (!response.Success) context.Result = new RedirectToActionResult("Error", "Home", new { area = "Seller" });
 
                 SelectList platforms = new SelectList(response.Platforms, "Id", "Name");
-                GameViewModel viewModel = new GameViewModel(game, platforms, imgsPerGame, tempImgPaths, loginManager.GetUserId());
+                GameViewModel viewModel = new GameViewModel(game, platforms, imgsPerGame, loginManager.GetUserId(), tempImgPaths);
                 context.Result = controller.View(viewModel);
             }
             else

@@ -1,8 +1,11 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UsedGamesSale.Models;
+using UsedGamesSale.Models.DTOs.GameDTOs;
+using UsedGamesSale.Models.ViewModels;
 using UsedGamesSale.Services.ImageFilter;
 using UsedGamesSale.Services.Login;
 using UsedGamesSale.Services.UsedGamesAPI;
@@ -13,14 +16,67 @@ namespace UsedGamesSale.Services.Controllers
     public class GameControllerServices
     {
         private readonly UsedGamesAPIGames _usedGamesAPIGames;
+        private readonly UsedGamesAPIPlatforms _usedGamesAPIPlatforms;
         private readonly IConfiguration _configuration;
         private readonly SellerLoginManager _loginManager;
 
-        public GameControllerServices(UsedGamesAPIGames usedGamesAPIGames, IConfiguration configuration, SellerLoginManager loginManager)
+        public GameControllerServices(UsedGamesAPIGames usedGamesAPIGames, UsedGamesAPIPlatforms usedGamesAPIPlatforms, IConfiguration configuration, SellerLoginManager loginManager)
         {
             _usedGamesAPIGames = usedGamesAPIGames;
+            _usedGamesAPIPlatforms = usedGamesAPIPlatforms;
             _configuration = configuration;
             _loginManager = loginManager;
+        }
+
+        public async Task<List<Image>> GetImagesAsync(int id)
+        {
+            UsedGamesAPIGameResponse response = await _usedGamesAPIGames.GetImagesAsync(id, _loginManager.GetUserToken());
+            if (!response.Success) return null;
+
+            return response.Images;
+        }
+
+        public async Task<GameViewModel> GetGameViewModelForRegisterAsync()
+        {
+            UsedGamesAPIPlatformResponse response = await _usedGamesAPIPlatforms.GetPlatformsAsync();
+            if (!response.Success) return null;
+
+            GameViewModel viewModel = new GameViewModel
+            (
+                platforms: new SelectList(response.Platforms, "Id", "Name"), imgsPerGame: GetImgsPerGame(), sellerId: _loginManager.GetUserId()
+            );
+            return viewModel;
+        }
+
+        public async Task<GameViewModel> GetGameViewModelForEditAsync()
+        {
+            UsedGamesAPIPlatformResponse platformResponse = await _usedGamesAPIPlatforms.GetPlatformsAsync();
+            if (!platformResponse.Success) return null;
+
+            GameViewModel viewModel = new GameViewModel
+            (
+                platforms: new SelectList(platformResponse.Platforms, "Id", "Name"),
+                imgsPerGame: GetImgsPerGame(), sellerId: _loginManager.GetUserId()
+            );
+
+            return viewModel;
+        }
+
+        public async Task<GameViewModel> GetGameViewModelForEditAsync(int id)
+        {
+            UsedGamesAPIGameResponse gameResponse = await _usedGamesAPIGames.GetAsync(id, _loginManager.GetUserToken());
+            if (!gameResponse.Success) return null;
+
+            UsedGamesAPIPlatformResponse platformResponse = await _usedGamesAPIPlatforms.GetPlatformsAsync();
+            if (!platformResponse.Success) return null;
+
+            GameViewModel viewModel = new GameViewModel
+            (
+                game: gameResponse.Game, platforms: new SelectList(platformResponse.Platforms, "Id", "Name"),
+                imgsPerGame: GetImgsPerGame(), sellerId: _loginManager.GetUserId()
+            );
+
+            return viewModel;
         }
 
         public async Task<Result> RegisterGameAsync(Game game)
@@ -37,6 +93,20 @@ namespace UsedGamesSale.Services.Controllers
 
             ImageHandler.DeleteImgFolder(GetImgsTempFolder());
             result.Success = true;
+            return result;
+        }
+
+        public async Task<Result> EditGameAsync(Game game)
+        {
+            UsedGamesAPIGameResponse response = await _usedGamesAPIGames.UpdateAsync(game, _loginManager.GetUserToken());
+            Result result = new Result(response.Success);
+            return result;
+        }
+
+        public async Task<Result> DeleteGameAsync(int id)
+        {
+            UsedGamesAPIGameResponse response = await _usedGamesAPIGames.DeleteAsync(id, _loginManager.GetUserToken());
+            Result result = new Result(response.Success);
             return result;
         }
 
