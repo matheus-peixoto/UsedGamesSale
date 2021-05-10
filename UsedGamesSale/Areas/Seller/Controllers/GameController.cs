@@ -11,9 +11,6 @@ using UsedGamesSale.Services.Filters;
 using UsedGamesSale.Services.Filters.Game;
 using UsedGamesSale.Services.Filters.Seller;
 using UsedGamesSale.Services.ImageFilter;
-using UsedGamesSale.Services.Login;
-using UsedGamesSale.Services.UsedGamesAPI;
-using UsedGamesSale.Services.UsedGamesAPI.Responses;
 
 namespace UsedGamesSale.Areas.Seller.Controllers
 {
@@ -21,15 +18,11 @@ namespace UsedGamesSale.Areas.Seller.Controllers
     [ValidateSellerLogin]
     public class GameController : Controller
     {
-        private readonly UsedGamesAPIGames _usedGamesAPIGames;
-        private SellerLoginManager _sellerLoginManager;
         private GameControllerServices _controllerServices;
 
-        public GameController(UsedGamesAPIGames usedGamesAPIGames, SellerLoginManager sellerLoginManager, GameControllerServices services)
+        public GameController(GameControllerServices services)
         {
-            _usedGamesAPIGames = usedGamesAPIGames;
             _controllerServices = services;
-            _sellerLoginManager = sellerLoginManager;
         }
 
         [HttpGet]
@@ -89,17 +82,8 @@ namespace UsedGamesSale.Areas.Seller.Controllers
         [HttpPost]
         public async Task<IActionResult> ChangeImage([FromForm] ChangeImagedDto gameDto)
         {
-            UsedGamesAPIGameResponse response = await _usedGamesAPIGames.GetImagesAsync(gameDto.GameId, _sellerLoginManager.GetUserToken());
-            if (!response.Success) return BadRequest();
-
-            if (!_controllerServices.IsNewImg(response.Images, gameDto.ImgFile.FileName)) return BadRequest(new { ErrorMessage = "This is not a new image" });
-
-            RecordResult recordResult = ImageHandler.Change($"{_controllerServices.GetImgsFolder()}/{gameDto.GameId}", gameDto.OldImgRelativePath, gameDto.ImgFile);
-            if (!recordResult.Success) return BadRequest(new { errorMsg = recordResult.ErrorMessage });
-
-            Image img = new Image(gameDto.ImgId, recordResult.Path, gameDto.GameId);
-            response = await _usedGamesAPIGames.UpdateImageAsync(img, _sellerLoginManager.GetUserToken());
-            if (!response.Success) return RedirectToAction("Error", "Home", new { area = "Seller" });
+            RecordResult recordResult = await _controllerServices.ChangeImageAsync(gameDto);
+            if (!recordResult.Success) return RedirectToAction("Error", "Home", new { area = "Seller" });
 
             return Ok(new { imgPath = recordResult.Path });
         }

@@ -88,7 +88,6 @@ namespace UsedGamesSale.Services.UsedGamesAPI
         {
             ConfigureToken(token);
             HttpResponseMessage responseMsg = await _client.DeleteAsync(_client.BaseAddress + id.ToString());
-            string responseStr = await responseMsg.Content.ReadAsStringAsync();
             UsedGamesAPIGameResponse response = new UsedGamesAPIGameResponse(responseMsg.IsSuccessStatusCode);
             return response;
         }

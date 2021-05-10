@@ -103,10 +103,34 @@ namespace UsedGamesSale.Services.Controllers
             return result;
         }
 
+        public async Task<RecordResult> ChangeImageAsync(ChangeImagedDto gameDto)
+        {
+            RecordResult recordResult = new RecordResult();
+            UsedGamesAPIGameResponse response = await _usedGamesAPIGames.GetImagesAsync(gameDto.GameId, _loginManager.GetUserToken());
+            if (!response.Success) return recordResult;
+
+            if (!IsNewImg(response.Images, gameDto.ImgFile.FileName)) {
+                recordResult.ErrorMessage = "This is not a new image";
+                return recordResult; 
+            }
+
+            recordResult = ImageHandler.Change($"{GetImgsFolder()}/{gameDto.GameId}", gameDto.OldImgRelativePath, gameDto.ImgFile);
+            if (!recordResult.Success) return recordResult;
+
+            Image img = new Image(gameDto.ImgId, recordResult.Path, gameDto.GameId);
+            response = await _usedGamesAPIGames.UpdateImageAsync(img, _loginManager.GetUserToken());
+
+            recordResult.Success = response.Success;
+            return recordResult;
+        }
+
         public async Task<Result> DeleteGameAsync(int id)
         {
             UsedGamesAPIGameResponse response = await _usedGamesAPIGames.DeleteAsync(id, _loginManager.GetUserToken());
             Result result = new Result(response.Success);
+
+            if (result.Success) ImageHandler.DeleteImgFolder($"{GetImgsFolder()}/{id}");
+
             return result;
         }
 

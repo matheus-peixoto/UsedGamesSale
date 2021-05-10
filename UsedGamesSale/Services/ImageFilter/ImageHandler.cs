@@ -9,6 +9,7 @@ namespace UsedGamesSale.Services.ImageFilter
         public static string[] GetAllTempImageRelativePaths(string relativePath)
         {
             string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", relativePath);
+            if (!Directory.Exists(path)) return new string[0];
             string[] files = Directory.GetFiles(path);
             for (int i = 0; i < files.Length; i++)
             {
